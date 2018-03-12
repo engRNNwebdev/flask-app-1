@@ -1,6 +1,5 @@
 import urllib2, json
 
-
 def content_start(title):
     SLICER_IP = "192.168.101.15"  # localhost
     SLICER_PORT = 65009      # default port
