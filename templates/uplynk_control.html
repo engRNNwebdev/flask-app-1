@@ -1,16 +1,58 @@
-<html>
-   <body>
+{# This simple template derives from ``base.html``.
+  See ``base.html`` for more information about template inheritance. #}
+  {%- extends "base.html" %}
 
-      <form action = "http://localhost:5000/content_start" method = "post">
-         <p>Fill Out Stream Parameters</p>
-         <p><label>External ID</label><input type = "text" name = "eid" /></p>
-         <p><input type = "submit" value = "Content Start" /></p>
-      </form>
+  {# Loads some of the macros included with Flask-Bootstrap.
+    We are using the utils module here to automatically
+render Flask's flashed messages in a bootstrap friendly manner #}
 
-      <form action = "http://localhost:5000/blackout" method = "post">
-         <p>Stop the slicer</p>
-         <p><input type = "submit" value = "Blackout" /></p>
-      </form>
+{% import "bootstrap/utils.html" as utils %}
 
-   </body>
-</html>
+{% block content %}
+<div class="container">
+  <h1>Uplynk Slicer Control</h1>
+  <div class="jumbotron">
+    <h3>Content Start Slicer</h3>
+    <form class="input-group" action="http://localhost:5000/content_start" method="post">
+
+      <p>Fill Out Stream Parameters</p>
+      <div role="separator" class="divider">
+        <label>External ID</label>
+        <input class="form-control" type="text" name="eid" />
+      </div>
+
+      <div role="separator" class="divider">
+        <label>Select Slicer</label>
+        <select class="form-control" name="slicers" width="300px">
+        {% for slicer in slicers %}
+            <option value="{{ slicer.port }}">{{ slicer.id  }}</option>
+        {% endfor %}
+        </select>
+      </div>
+
+      <input class="btn btn-default" type="submit" value="Content Start" />
+    </form>
+  </div>
+  <div role="separator" class="divider">
+
+  </div>
+  <div class="jumbotron">
+    <h3>Blackout Slicer</h3>
+
+    <form class="input-group" action="http://localhost:5000/blackout" method="post">
+
+      <div role="separator" class="divider">
+        <label>Select Slicer</label>
+        <select class="form-control" name="slicers" width="300px">
+        {% for slicer in slicers %}
+            <option value="{{ slicer.port }}" name="id">{{ slicer.id  }}</option>
+        {% endfor %}
+        </select>
+      </div>
+      <input class="btn btn-default" type="submit" value="blackout slicer" />
+
+    </form>
+  </div>
+</div>
+
+{% endblock %}
