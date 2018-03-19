@@ -4,3 +4,9 @@ flask-app:
     - "5000:5000"
   volumes:
     - .:/code
+  links:
+    - mongo-db
+mongo-db:
+  image: mongo:3.6.3-jessie
+  volumes:
+    - ./dbinit:/tmp

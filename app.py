@@ -1,6 +1,6 @@
 from flask import Flask, redirect, url_for, request, render_template
 from flask_bootstrap import Bootstrap
-import uplynk
+import uplynk, mongopawn, sys
 #Initialize app and Bootstrap
 
 app = Flask(__name__)
@@ -9,20 +9,25 @@ Bootstrap(app)
 #Create web page routes
 @app.route('/')
 def index():
-  return render_template('index.html')
+    posted = mongopawn.get_post
+    
+#    print(posted, file=sys.stderr)
+#    print(test, file=sys.stderr)
+    return render_template('index.html', test = posted)
 
-@app.route('/success/<actionthing>/<name>')
-def success(name,actionthing):
-    if actionthing == 'stop':
-        return 'Successfully stopped on port %s' % name
-    elif actionthing == 'start':
-        return 'Successfully started on port %s' % name
-@app.route('/failure/<actionthing>/<name>')
-def failure(name):
-    if actionthing == 'stop':
-        return 'The Slicer failed to stop %s, please escalate to Engineering' % name
-    elif actionthing == 'start':
-        return 'The Slicer failed to start on port %s, please escalate to Engineering' % name
+@app.route('/status/<actionthing>/<name>/<success>')
+def status(name,actionthing,success):
+    slicers = uplynk.slicers
+    if success:
+        if actionthing == 'stop':
+            return render_template('uplynk_control.html', slicers = slicers, worky = 'Successfully stopped on port %s' % name)
+        elif actionthing == 'start':
+            return render_template('uplynk_control.html', slicers = slicers, worky = 'Successfully started on port %s' % name)
+    else:
+        if actionthing == 'stop':
+            return render_template('uplynk_control.html', slicers = slicers, worky = 'The Slicer failed to stop on port %s, please escalate to Engineering')
+        elif actionthing == 'start':
+            return render_template('uplynk_control.html', slicers = slicers, worky = 'The Slicer failed to start on port %s, please escalate to Engineering' % name)
 @app.route('/login', methods = ['POST', 'GET'])
 def login():
   if request.method == 'POST':
@@ -34,26 +39,29 @@ def login():
 @app.route('/content_start', methods = ['POST', 'GET'])
 def start_slicer():
   if request.method == 'POST':
-      eid = request.form['eid']
+      external_id = request.form['external_id']
       slicer = request.form['slicers']
-      uplynk.content_start(slicer,eid)
-      return redirect(url_for('success', actionthing = 'start', name = eid))
+      title = request.form['title']
+      uplynk.content_start(slicer,external_id,title)
+      #return render_template('uplynk_control.html', status_capture = 'result')
+      return redirect(url_for('status', actionthing = 'start', name = slicer, success = True))
   else:
       sliced = request.args.get('slicers')
-      return redirect(url_for('failure',name = sliced))
+      return redirect(url_for('status', actionthing = 'start', name = sliced, success = False))
 @app.route('/blackout', methods = ['POST', 'GET'])
 def blackout_slicer():
   if request.method == 'POST':
       slicer = request.form['slicers']
-      uplynk.blackout(slicer)
-      return redirect(url_for('success',actionthing = 'stop', name = slicer))
+      result = uplynk.blackout(slicer)
+      #return render_template('uplynk_control.html',status_capture = 'result')
+      return redirect(url_for('status', actionthing = 'stop', name = slicer, success = True))
   else:
       sliced = request.args.get('slicers')
-      return redirect(url_for('failure',name = sliced))
+      return redirect(url_for('status', actionthing = 'stop', name = sliced, success = False))
 @app.route('/uplynk')
 def uplynk_control():
     slicers = uplynk.slicers
-    return render_template('uplynk_control.html',slicers=slicers)
+    return render_template('uplynk_control.html',slicers=slicers, worky = 'Select a Slicer and give the Asset a title and External ID (can be the same)')
 @app.route('/materialid')
 def material_id():
   return 'Material ID page goes here'
