@@ -34,9 +34,8 @@
 {% block styles -%}
     {{super()}}  {# do not forget to call super or Bootstrap's own stylesheets
                     will disappear! #}
-    <link rel="stylesheet" type="text/css"
-          href="{{url_for('static', filename='sample-app.css')}}">
-          <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css">
+    <link rel="shortcut icon" href="/static/favicon.ico">
 {% endblock %}
 
 {# Finally, round things out with navigation #}
@@ -52,6 +51,7 @@
     <ul class="nav navbar-nav pull-right">
       <li><a href="/uplynk">Uplynk Control</a></li>
       <li><a href="/materialid">Material IDs</a></li>
+      <li><a href="#">TBD Uplynk Preview</a></li> 
     </ul>
   </nav>
 </div>

@@ -1,7 +1,8 @@
 from flask import Flask, redirect, url_for, request, render_template
 from flask_bootstrap import Bootstrap
 from pymongo import MongoClient
-import uplynk, mongopawn, sys, os
+import uplynk, mongopawn, os, logging
+from logging.handlers import RotatingFileHandler
 #Initialize app
 app = Flask(__name__)
 #Initialize Bootstrap
@@ -13,8 +14,8 @@ db = client.tododb
 #Create web page routes
 @app.route('/')
 def index():
-#    print(posted, file=sys.stderr)
-#    print(test, file=sys.stderr)
+    app.logger.info('TEST PRINT')
+    posted = 'TEST PRINT'
     return render_template('index.html', test = posted)
 
 @app.route('/status/<actionthing>/<name>/<success>')
