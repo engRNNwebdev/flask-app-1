@@ -1,4 +1,4 @@
-version: '2'
+version: '3.6'
 services:
   web:
     restart: always
@@ -19,16 +19,11 @@ services:
       - "80:80"
     volumes:
       - /www/static
-    volumes_from:
-      - web
     links:
       - web:web
 
-  data:
-    image: mongo:3.6.3-jessie
-    command: "true"
-
   mongo-db:
+    restart: always
     image: mongo:3.6.3-jessie
     container_name: "mongodb"
     environment:
@@ -36,6 +31,7 @@ services:
       - MONGO_LOG_DIR=/dev/null
     ports:
         - 27017:27017
-    restart: always
-    volumes_from:
-      - data
+    volumes:
+      - data:/data/db
+volumes:
+  data:
