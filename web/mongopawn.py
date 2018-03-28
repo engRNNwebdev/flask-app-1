@@ -1,8 +1,6 @@
 from pymongo import MongoClient
 import datetime, pprint, sys
-client = MongoClient("localhost",27017)
-db = client["pawn"]
-collection = db["posts"]
+
 
 post = { "author": "Mongo",
          "text": "Mongo is just pawn in life",

@@ -1,16 +1,18 @@
 from flask import Flask, redirect, url_for, request, render_template
 from flask_bootstrap import Bootstrap
-import uplynk, mongopawn, sys
-#Initialize app and Bootstrap
-
+from pymongo import MongoClient
+import uplynk, mongopawn, sys, os
+#Initialize app
 app = Flask(__name__)
+#Initialize Bootstrap
 Bootstrap(app)
+#Initialize Mongo Client
+client = MongoClient()
+db = client.tododb
 
 #Create web page routes
 @app.route('/')
 def index():
-    posted = mongopawn.get_post
-    
 #    print(posted, file=sys.stderr)
 #    print(test, file=sys.stderr)
     return render_template('index.html', test = posted)
@@ -67,4 +69,4 @@ def material_id():
   return 'Material ID page goes here'
 #Run App and startup
 if __name__ == '__main__':
-    app.run(debug=True,host='0.0.0.0')
+    app.run(debug=True)
