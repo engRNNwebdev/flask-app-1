@@ -2,17 +2,17 @@ web:
   restart: always
   build: ./web
   expose:
-    - "8000"
+    - "5000"
   links:
     - postgres:postgres
   volumes:
     - /usr/src/app/static
   env_file: .env
-  command: /usr/local/bin/gunicorn -w 2 -b :8000 app:app
+  command: /usr/local/bin/gunicorn -w 2 -b :5000 app:app
 
 nginx:
   restart: always
-  build: ./nginx/
+  build: ./nginx
   ports:
     - "80:80"
   volumes:
@@ -27,7 +27,7 @@ data:
   image: postgres:latest
   volumes:
     - /var/lib/postgresql
-  command: true
+  command: "true"
 
 postgres:
   restart: always
