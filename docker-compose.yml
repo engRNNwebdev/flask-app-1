@@ -1,16 +1,27 @@
 version: '3.6'
 services:
   web:
-    restart: always
-    build: ./web
+    image: python:2.7-alpine
+    command: python app.py
     ports:
-      - 5000:5000
+      - "5000:5000"
+    volumes:
+      - ./web:/web
+      - /usr/src/app/static
+    restart: always
     links:
       - mongo-db:mongo-db
+    #command: /usr/local/bin/gunicorn -w 2 -b :5000 app:app
+
+  nginx:
+    restart: always
+    build: ./nginx
+    ports:
+      - "80:80"
     volumes:
-      - /usr/src/app/static
-    env_file: .env
-    command: /usr/local/bin/gunicorn -w 2 -b :5000 app:app
+      - ./nginx:/www/static
+    links:
+      - web:web
 
   mongo-db:
     restart: always
