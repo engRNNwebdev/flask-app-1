@@ -1,0 +1,48 @@
+version: '3.6'
+services:
+  web:
+      build: ./web
+      ports:
+          - "5000:5000"
+      volumes:
+          - ./web:/code
+      depends_on:
+          - redis
+  redis:
+      image: redis
+    # image: python:2.7-alpine
+    # command: python app.py
+    # ports:
+    #   - "5000:5000"
+    #
+    # restart: always
+    # links:
+    #   - mongo-db:mongo-db
+    #command: /usr/local/bin/gunicorn -w 2 -b :5000 app:app
+
+  nginx:
+    image: yeasy/nginx
+    hostname: nginx
+    links:
+      - web:web
+    ports:
+      - "80:80"
+    environment:
+      - BACKEND=web
+      - PORT=80
+      - USERNAME=user
+      - PASSWORD=pass
+
+  # mongo-db:
+  #   restart: always
+  #   image: mongo:3.6.3-jessie
+  #   container_name: "mongodb"
+  #   environment:
+  #     - MONGO_DATA_DIR=/data/db
+  #     - MONGO_LOG_DIR=/dev/null
+  #   ports:
+  #       - 27017:27017
+  #   volumes:
+  #     - data:/data/db
+# volumes:
+#   data:
