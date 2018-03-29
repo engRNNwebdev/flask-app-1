@@ -1,6 +1,7 @@
 version: '3.6'
 services:
   web:
+    image: python:2.7-alpine
     restart: always
     build: ./web
     ports:
@@ -13,6 +14,7 @@ services:
     command: /usr/local/bin/gunicorn -w 2 -b :5000 app:app
 
   nginx:
+    image: tutum/nginx
     restart: always
     build: ./nginx/
     ports:
