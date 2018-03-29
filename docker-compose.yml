@@ -1,23 +1,11 @@
 version: '3.6'
 services:
   web:
-    build: ./web
+    build: .
     ports:
         - "5000:5000"
     volumes:
-        - ./web:/code
-  nginx:
-    image: yeasy/nginx
-    hostname: nginx
-    links:
-      - web:web
-    ports:
-      - "80:80"
-    environment:
-      - BACKEND=web
-      - PORT=80
-      - USERNAME=user
-      - PASSWORD=pass
+        - .:/app
 
   mongo-db:
     restart: always

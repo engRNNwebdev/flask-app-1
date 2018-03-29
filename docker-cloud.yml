@@ -1,11 +1,3 @@
-nginx:
-  image: 'yeasy/nginx:latest'
-  links:
-    - web
-  ports:
-    - '80:80'
-  roles:
-    - global
 db:
   environment:
     - MONGO_DATA_DIR=/data/db
