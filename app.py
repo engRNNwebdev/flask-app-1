@@ -8,8 +8,8 @@ app = Flask(__name__)
 #Initialize Bootstrap
 Bootstrap(app)
 #Initialize Mongo Client
-client = MongoClient()
-db = client.tododb
+client = MongoClient('mongodb://localhost:27017/')
+db = client.uplynk
 
 #Create web page routes
 @app.route('/')
@@ -63,6 +63,8 @@ def blackout_slicer():
       return redirect(url_for('status', actionthing = 'stop', name = sliced, success = False))
 @app.route('/uplynk')
 def uplynk_control():
+    mongo_slicers = db.slicers.find_one()
+    app.logger.info(mongo_slicers)
     slicers = uplynk.slicers
     return render_template('uplynk_control.html',slicers=slicers, worky = 'Select a Slicer and give the Asset a title and External ID (can be the same)')
 @app.route('/materialid')

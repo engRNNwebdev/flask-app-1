@@ -1,7 +1,8 @@
 from pymongo import MongoClient
 import datetime, pprint, sys
 
-
+rnnuplynk1 = { "slicer_id" : "rnnuplynk1", "port" : 65009, "address": "192.168.101.15"}
+rnnuplynk2 = { "slicer_id": "rnnuplynk2", "port" : 65011, "address" : "192.168.101.15"}
 post = { "author": "Mongo",
          "text": "Mongo is just pawn in life",
          "tags": ["mongodb", "python", "pymongo"],
