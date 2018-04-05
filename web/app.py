@@ -1,19 +1,24 @@
 from flask import Flask, redirect, url_for, request, render_template
 from flask_bootstrap import Bootstrap
-from pymongo import MongoClient
-import uplynk, mongopawn, os, logging
+from flask_sqlalchemy import SQLAlchemy
+from config import BaseConfig
+import uplynk, os, logging
 from logging.handlers import RotatingFileHandler
 #Initialize app
 app = Flask(__name__)
 #Initialize Bootstrap
 Bootstrap(app)
 #Initialize Mongo Client
-client = MongoClient('mongodb://localhost:27017/')
-db = client.uplynk
+app.config.from_object(BaseConfig)
+db = SQLAlchemy(app)
+from models import *
 
 #Create web page routes
-@app.route('/')
+
+@app.route('/', methods = ['POST', 'GET'])
 def index():
+
+
     app.logger.info('TEST PRINT')
     posted = 'TEST PRINT'
     return render_template('index.html', test = posted)
@@ -32,8 +37,9 @@ def status(name,actionthing,success):
                 return render_template('uplynk_control.html', slicers = slicers, worky = 'The Slicer failed to stop on port %s, please escalate to Engineering')
             elif actionthing == 'start':
                 return render_template('uplynk_control.html', slicers = slicers, worky = 'The Slicer failed to start on port %s, please escalate to Engineering' % name)
-    else: 
+    else:
         return render_template('uplynk_control.html', slicers = slicers, worky = 'The Slicer failed to start on port %s, please escalate to Engineering' % name)
+
 @app.route('/login', methods = ['POST', 'GET'])
 def login():
   if request.method == 'POST':
@@ -42,6 +48,7 @@ def login():
   else:
       user = request.args.get('nm')
       return redirect(url_for('success',name = user))
+
 @app.route('/content_start', methods = ['POST', 'GET'])
 def start_slicer(methods = ['POST', 'GET']):
   if request.method == 'POST':
@@ -54,6 +61,7 @@ def start_slicer(methods = ['POST', 'GET']):
   else:
       sliced = request.args.get('slicers')
       return redirect(url_for('status', actionthing = 'start', name = sliced, success = False))
+
 @app.route('/blackout', methods = ['POST', 'GET'])
 def blackout_slicer():
   if request.method == 'POST':
@@ -64,15 +72,22 @@ def blackout_slicer():
   else:
       sliced = request.args.get('slicers')
       return redirect(url_for('status', actionthing = 'stop', name = sliced, success = False))
+
 @app.route('/uplynk')
 def uplynk_control():
-    mongo_slicers = db.slicers.find_one()
-    app.logger.info(mongo_slicers)
+    db_slicers = Slicer.query.order_by(Slicer.id.desc()).all()
+    app.logger.info(db_slicers)
     slicers = uplynk.slicers
     return render_template('uplynk_control.html',slicers=slicers, worky = 'Select a Slicer and give the Asset a title and External ID (can be the same)')
+
+@app.route('/preview')
+def preview():
+    return render_template('preview.html');
+
 @app.route('/materialid')
 def material_id():
   return 'Material ID page goes here'
+
 #Run App and startup
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True)
