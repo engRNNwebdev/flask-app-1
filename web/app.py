@@ -23,9 +23,10 @@ def index():
     posted = 'TEST PRINT'
     return render_template('index.html', test = posted)
 
-@app.route('/status/<actionthing>/<name>/<success>', methods = ['POST', 'GET'])
+@app.route('/status/<actionthing>/<name>/<success>')
 def status(name,actionthing,success):
     slicers = uplynk.slicers
+<<<<<<< HEAD:web/app.py
     if request.method == 'POST':
         if success:
             if actionthing == 'stop':
@@ -40,6 +41,18 @@ def status(name,actionthing,success):
     else:
         return render_template('uplynk_control.html', slicers = slicers, worky = 'The Slicer failed to start on port %s, please escalate to Engineering' % name)
 
+=======
+    if success:
+        if actionthing == 'stop':
+            return render_template('uplynk_control.html', slicers = slicers, worky = 'Successfully stopped on port %s' % name)
+        elif actionthing == 'start':
+            return render_template('uplynk_control.html', slicers = slicers, worky = 'Successfully started on port %s' % name)
+    else:
+        if actionthing == 'stop':
+            return render_template('uplynk_control.html', slicers = slicers, worky = 'The Slicer failed to stop on port %s, please escalate to Engineering')
+        elif actionthing == 'start':
+            return render_template('uplynk_control.html', slicers = slicers, worky = 'The Slicer failed to start on port %s, please escalate to Engineering' % name)
+>>>>>>> afb50f78d0c51b87691e57d282c7435b82a1fcf8:web/app.py
 @app.route('/login', methods = ['POST', 'GET'])
 def login():
   if request.method == 'POST':
@@ -50,7 +63,7 @@ def login():
       return redirect(url_for('success',name = user))
 
 @app.route('/content_start', methods = ['POST', 'GET'])
-def start_slicer(methods = ['POST', 'GET']):
+def start_slicer():
   if request.method == 'POST':
       external_id = request.form['external_id']
       slicer = request.form['slicers']

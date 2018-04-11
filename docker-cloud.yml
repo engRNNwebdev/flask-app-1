@@ -1,0 +1,4 @@
+eng-web:
+  image: 'ferrarojespn/eng-web:latest'
+  ports:
+    - "80:80"
