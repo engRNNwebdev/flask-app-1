@@ -1,22 +1,37 @@
-version: '3.6'
-services:
-  web:
-    build: .
-    ports:
-        - "5000:5000"
-    volumes:
-        - .:/app
+web:
+  restart: always
+  build: ./web
+  expose:
+    - "8000"
+  links:
+    - postgres:postgres
+  volumes:
+    - /usr/src/app/static
+  env_file: .env
+  command: /usr/local/bin/gunicorn -w 2 -b :8000 app:app
 
-  mongo-db:
-    restart: always
-    image: mongo:3.6.3-jessie
-    container_name: "mongodb"
-    environment:
-      - MONGO_DATA_DIR=/data/db
-      - MONGO_LOG_DIR=/dev/null
-    ports:
-        - 27017:27017
-    volumes:
-      - data:/data/db
-volumes:
-  data:
+nginx:
+  restart: always
+  build: ./nginx/
+  ports:
+    - "80:80"
+  volumes:
+    - /www/static
+  volumes_from:
+    - web
+  links:
+    - web:web
+
+data:
+  image: postgres:latest
+  volumes:
+    - /var/lib/postgresql
+  command: "true"
+
+postgres:
+  restart: always
+  image: postgres:latest
+  volumes_from:
+    - data
+  ports:
+    - "5432:5432"
