@@ -1,5 +1,8 @@
+flask_sqlalchemy
+SQLAlchemy==0.9.9
+gunicorn==19.3.0
+psycopg2-binary
 Flask
 flask_bootstrap
-pymongo
 gunicorn==19.3.0
 logging

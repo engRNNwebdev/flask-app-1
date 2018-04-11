@@ -1,22 +1,35 @@
-version: '3.6'
-services:
-  web:
-    build: .
-    ports:
-        - "5000:5000"
-    volumes:
-        - .:/app
+nginx:
+  restart: always
+  image: 'tutum/nginx:latest'
+  links:
+    - eng-web
+  ports:
+    - '80:80'
+    - '443'
+  volumes_from:
+    - eng-web
 
-  mongo-db:
-    restart: always
-    image: mongo:3.6.3-jessie
-    container_name: "mongodb"
-    environment:
-      - MONGO_DATA_DIR=/data/db
-      - MONGO_LOG_DIR=/dev/null
-    ports:
-        - 27017:27017
-    volumes:
-      - data:/data/db
-volumes:
-  data:
+eng-web:
+  image: 'ferrarojespn/eng-web2:latest'
+  ports:
+      - "5000:5000"
+  links:
+      - postgres:postgres
+  environment:
+    - DB_NAME=postgres
+    - DB_PASS=postgres
+    - DB_PORT=5432
+    - DB_SERVICE=postgres
+    - DB_USER=postgres
+    - DEBUG=False
+    - SECRET_KEY=keykeykey
+data:
+  image: postgres:latest
+
+postgres:
+  restart: always
+  image: postgres:latest
+  volumes:
+    - data
+  ports:
+    - "5432:5432"
