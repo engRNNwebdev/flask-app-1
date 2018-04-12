@@ -1,20 +1,7 @@
-nginx:
-  restart: always
-  image: 'tutum/nginx:latest'
-  links:
-    - eng-web
-  ports:
-    - '80:80'
-    - '443'
-  volumes_from:
-    - eng-web
-
 eng-web:
-  image: 'ferrarojespn/eng-web2:latest'
+  build: .
   ports:
       - "5000:5000"
-  links:
-      - postgres:postgres
   environment:
     - DB_NAME=postgres
     - DB_PASS=postgres
@@ -23,13 +10,3 @@ eng-web:
     - DB_USER=postgres
     - DEBUG=False
     - SECRET_KEY=keykeykey
-data:
-  image: postgres:latest
-
-postgres:
-  restart: always
-  image: postgres:latest
-  volumes:
-    - data
-  ports:
-    - "5432:5432"
