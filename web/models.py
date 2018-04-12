@@ -4,7 +4,6 @@
 import datetime
 from app import db
 
-
 class Slicer(db.Model):
 
     __tablename__ = 'slicers'

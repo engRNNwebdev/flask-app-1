@@ -17,8 +17,6 @@ from models import *
 
 @app.route('/', methods = ['POST', 'GET'])
 def index():
-
-
     app.logger.info('TEST PRINT')
     posted = 'TEST PRINT'
     return render_template('index.html', test = posted)
