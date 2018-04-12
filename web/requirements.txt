@@ -1,5 +1,0 @@
-Flask
-flask_bootstrap
-pymongo
-gunicorn==19.3.0
-logging

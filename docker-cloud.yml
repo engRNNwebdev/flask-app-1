@@ -1,4 +1,4 @@
 eng-web:
-  image: 'ferrarojespn/eng-web:latest'
+  image: 'ferrarojespn/rnn-eng-web-app:latest'
   ports:
     - "80:80"
