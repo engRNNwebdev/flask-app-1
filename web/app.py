@@ -17,6 +17,8 @@ from models import *
 
 @app.route('/', methods = ['POST', 'GET'])
 def index():
+
+
     app.logger.info('TEST PRINT')
     posted = 'TEST PRINT'
     return render_template('index.html', test = posted)
@@ -37,7 +39,6 @@ def status(name,actionthing,success):
                 return render_template('uplynk_control.html', slicers = slicers, worky = 'The Slicer failed to start on port %s, please escalate to Engineering' % name)
     else:
         return render_template('uplynk_control.html', slicers = slicers, worky = 'The Slicer failed to start on port %s, please escalate to Engineering' % name)
-
 @app.route('/login', methods = ['POST', 'GET'])
 def login():
   if request.method == 'POST':

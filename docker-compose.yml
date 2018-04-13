@@ -1,6 +1,6 @@
 web:
   restart: always
-  build: .
+  build: ./web/
   ports:
     - "5000:5000"
   links:
@@ -9,18 +9,10 @@ web:
     - /usr/src/app/static
   env_file: .env
   command: /usr/local/bin/gunicorn -w 2 -b :5000 app:app
-  environment:
-    - DB_NAME=postgres
-    - DB_PASS=postgres
-    - DB_PORT=5432
-    - DB_SERVICE=postgres
-    - DB_USER=postgres
-    - DEBUG=False
-    - SECRET_KEY=keykeykey
 
 nginx:
   restart: always
-  build: .
+  build: ./nginx/
   ports:
     - "80:80"
   volumes:
