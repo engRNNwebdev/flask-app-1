@@ -1,10 +1,10 @@
-#FROM ubuntu:latest
-FROM python:2.7-alpine
+FROM ubuntu:latest
+#FROM python:2.7-alpine
 MAINTAINER Jonathan Ferraro "engstaff@rnntv.com"
-#RUN apt-get update -y
-#RUN apt-get install -y python-pip python-dev build-essential
-#RUN pip install --upgrade pip
-RUN apk add --update python py-pip
+RUN apt-get update -y
+RUN apt-get install -y python-pip python-dev build-essential
+RUN pip install --upgrade pip
+#RUN apk add --update python py-pip
 COPY . /app
 WORKDIR /app
 RUN pip install -r requirements.txt

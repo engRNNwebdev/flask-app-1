@@ -1,6 +1,6 @@
 from flask import Flask, redirect, url_for, request, render_template
 from flask_bootstrap import Bootstrap
-from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy, SessionBase
 from config import BaseConfig
 import uplynk, os, logging
 from logging.handlers import RotatingFileHandler
@@ -18,15 +18,15 @@ from models import *
 @app.route('/', methods = ['POST', 'GET'])
 def index():
 
+    posted = Slicer.query.order_by(Slicer.id.desc()).all()
 
     app.logger.info('TEST PRINT')
-    posted = 'TEST PRINT'
+    # posted = 'TEST PRINT'
     return render_template('index.html', test = posted)
 
 @app.route('/status/<actionthing>/<name>/<success>')
 def status(name,actionthing,success):
     slicers = uplynk.slicers
-<<<<<<< HEAD:web/app.py
     if request.method == 'POST':
         if success:
             if actionthing == 'stop':
@@ -41,18 +41,6 @@ def status(name,actionthing,success):
     else:
         return render_template('uplynk_control.html', slicers = slicers, worky = 'The Slicer failed to start on port %s, please escalate to Engineering' % name)
 
-=======
-    if success:
-        if actionthing == 'stop':
-            return render_template('uplynk_control.html', slicers = slicers, worky = 'Successfully stopped on port %s' % name)
-        elif actionthing == 'start':
-            return render_template('uplynk_control.html', slicers = slicers, worky = 'Successfully started on port %s' % name)
-    else:
-        if actionthing == 'stop':
-            return render_template('uplynk_control.html', slicers = slicers, worky = 'The Slicer failed to stop on port %s, please escalate to Engineering')
-        elif actionthing == 'start':
-            return render_template('uplynk_control.html', slicers = slicers, worky = 'The Slicer failed to start on port %s, please escalate to Engineering' % name)
->>>>>>> afb50f78d0c51b87691e57d282c7435b82a1fcf8:web/app.py
 @app.route('/login', methods = ['POST', 'GET'])
 def login():
   if request.method == 'POST':
@@ -100,6 +88,17 @@ def preview():
 @app.route('/materialid')
 def material_id():
   return 'Material ID page goes here'
+
+@app.route('/init')
+def init():
+    uplynk1 = Slicer(slicer_id=os.getenv('SLICER_ID_ONE'), address=os.getenv('SLICER_ADDRESS_ONE'), port=os.getenv('SLICER_PORT_ONE'), channel_id=os.getenv('SLICER_CHANNEL_ID_ONE'))
+    uplynk2 = Slicer(slicer_id=os.getenv('SLICER_ID_TWO'), address=os.getenv('SLICER_ADDRESS_TWO'), port=os.getenv('SLICER_PORT_TWO'), channel_id=os.getenv('SLICER_CHANNEL_ID_TWO'))
+    db.session.add_all([uplynk1, uplynk2])
+    # db.session.add(uplynk2)
+    db.session.flush()
+    app.logger.info('Init slicers')
+    posted = 'Initiated'
+    return render_template('index.html', test = posted)
 
 #Run App and startup
 if __name__ == '__main__':

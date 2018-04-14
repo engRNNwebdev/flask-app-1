@@ -1,15 +1,10 @@
 # create_db.py
-
-<<<<<<< HEAD
+import os
 from app import db
 from models import *
 db.create_all()
-ed_slicer = Slicer(slicer_id='rnnuplynk1', address='192.168.101.15', port=65009, channel_id='Fios1News Long Island PGM')
-db.session.add(ed_slicer)
-posted = Slicer.query.order_by(Slicer.id.desc()).all()
-=======
-
-from app import db
-
-db.create_all()
->>>>>>> afb50f78d0c51b87691e57d282c7435b82a1fcf8
+slicer = Slicer(slicer_id=os.getenv('SLICER_ID_ONE'), address=os.getenv('SLICER_ADDRESS_ONE'), port=os.getenv('SLICER_PORT_ONE'), channel_id=os.getenv('SLICER_CHANNEL_ID_ONE'))
+print 'Slicer made'
+# db.session = sessionmaker(bind = engine)()
+db.session.add(slicer)
+print 'Slicer added'
