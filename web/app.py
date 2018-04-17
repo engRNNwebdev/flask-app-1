@@ -95,7 +95,7 @@ def init():
     uplynk2 = Slicer(slicer_id=os.getenv('SLICER_ID_TWO'), address=os.getenv('SLICER_ADDRESS_TWO'), port=os.getenv('SLICER_PORT_TWO'), channel_id=os.getenv('SLICER_CHANNEL_ID_TWO'))
     db.session.add_all([uplynk1, uplynk2])
     # db.session.add(uplynk2)
-    db.session.flush()
+    db.session.commit()
     app.logger.info('Init slicers')
     posted = 'Initiated'
     return render_template('index.html', test = posted)
