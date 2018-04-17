@@ -19,7 +19,7 @@ services:
     image: tutum/nginx:latest
     build: 
       context: ./nginx/
-      dockerfile:" Dockerfile
+      dockerfile: Dockerfile
     ports:
       - "80:80"
     volumes:
