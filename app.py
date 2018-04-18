@@ -76,7 +76,7 @@ def uplynk_control():
     db_slicers = Slicer.query.order_by(Slicer.id.desc()).all()
     app.logger.info(db_slicers)
     slicers = uplynk.slicers
-    return render_template('uplynk_control.html',slicers=slicers, worky = 'Select a Slicer and give the Asset a title and External ID (can be the same)')
+    return render_template('uplynk_control.html',slicers=db_slicers, worky = 'Select a Slicer and give the Asset a title and External ID (can be the same)')
 
 @app.route('/preview')
 def preview():
