@@ -1,3 +1,7 @@
+upstream {
+  server 192.168.102.26:80
+}
+
 server {
 
     listen 80;
