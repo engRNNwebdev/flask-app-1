@@ -1,5 +1,5 @@
 upstream web {
-  server 192.168.102.26:80
+  server 192.168.102.26:80;
 }
 
 server {
