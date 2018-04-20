@@ -12,6 +12,6 @@ nginx:
 
 web:
   restart: always
-  image: ferraro/flask-app:latest
+  image: ferraro/flask-app:web-prod
   ports:
     - "5000:5000"
