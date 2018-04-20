@@ -2,3 +2,4 @@ eng-web:
   image: 'ferraro/flask-app:web-prod'
   ports:
     - "5000:5000"
+  command: /usr/local/bin/gunicorn -w 2 -b :5000 app:app
