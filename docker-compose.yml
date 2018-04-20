@@ -13,5 +13,5 @@ nginx:
 web:
   restart: always
   image: ferraro/flask-app:latest
-  expose:
-    - "5000"
+  ports:
+    - "5000:5000"
