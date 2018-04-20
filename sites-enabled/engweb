@@ -1,9 +1,7 @@
-
-upstream web {
-    server 192.168.102.26
-}
-
 server {
+    upstream web {
+        server 192.168.102.26
+    }
 
     listen 80;
     server_name example.org;
