@@ -1,8 +1,8 @@
-server {
-    upstream web {
-        server 192.168.102.26
-    }
+upstream web {
+    server 192.168.102.26;
+}
 
+server {
     listen 80;
     server_name example.org;
     charset utf-8;
