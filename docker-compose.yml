@@ -9,9 +9,3 @@ nginx:
     - web
   links:
     - web:web
-
-web:
-  restart: always
-  image: ferraro/flask-app:web-prod
-  ports:
-    - "5000:5000"
