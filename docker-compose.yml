@@ -5,7 +5,3 @@ nginx:
     - "80:80"
   volumes:
     - /www/static
-  volumes_from:
-    - web
-  links:
-    - web:web
