@@ -1,4 +1,4 @@
 eng-web:
-  image: ferraro/rnn-eng-web-nginx:latest
+  image: ferraro/flask-app:nginx
   ports:
     - "80:80"
