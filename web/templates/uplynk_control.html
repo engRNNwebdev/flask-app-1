@@ -29,7 +29,7 @@ render Flask's flashed messages in a bootstrap friendly manner #}
         <label>Select Slicer</label>
         <select class="form-control" name="slicers" width="300px">
         {% for slicer in slicers %}
-            <option value="{{ slicer.port }}">{{ slicer.id  }}</option>
+            <option value="{{ slicer.port }}">{{ slicer.slicer_id  }}</option>
         {% endfor %}
         </select>
       </div>
@@ -50,7 +50,7 @@ render Flask's flashed messages in a bootstrap friendly manner #}
         <label>Select Slicer</label>
         <select class="form-control" name="slicers" width="300px">
         {% for slicer in slicers %}
-            <option value="{{ slicer.port }}" name="id">{{ slicer.id  }}</option>
+            <option value="{{ slicer.port }}" name="id">{{ slicer.slicer_id  }}</option>
         {% endfor %}
         </select>
       </div>

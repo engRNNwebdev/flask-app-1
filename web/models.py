@@ -12,13 +12,15 @@ class Slicer(db.Model):
     slicer_id = db.Column(db.String, nullable=False)
     address = db.Column(db.String, nullable=False)
     port = db.Column(db.Integer, nullable=False)
-    channel_id = db.Column(db.String, nullable=False)
+    channel_id = db.Column(db.String, nullable=True)
+    def __init__(self, slicer_id=None, address=None, port=None, channel_id=None):
+        self.slicer_id = slicer_id
+        self.address = address
+        self.port = port
+        self.channel_id = channel_id
     def __repr__(self):
-        return "<User(slicer_id='%s', address='%s', port='%s', channel_id='%s')>" % (
+        return "<Slicer(slicer_id='%s', address='%s', port='%s', channel_id='%s')>" % (
                                 self.slicer_id, self.address, self.port, self.channel_id)
-    # def __init__(self, text):
-    #     self.text = text
-    #     self.date_posted = datetime.datetime.now()
 
 # [
 #   {
