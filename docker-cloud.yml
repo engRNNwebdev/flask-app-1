@@ -1,4 +1,16 @@
-eng-web:
-  image: 'ferraro/flask-app:full-stack'
+nginx:
+  image: 'ferraro/flask-app:nginx'
+  links: 'web'
   ports:
     - "80:80"
+web:
+  image: 'ferraro/flask-app:web'
+  links: 'postgres'
+  ports:
+    - "5000:5000"
+postgres:
+  image: 'postgres:latest'
+  links:
+    - data
+data:
+  image: 'postgres:latest'
