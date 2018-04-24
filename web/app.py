@@ -13,16 +13,24 @@ app.config.from_object(BaseConfig)
 db = SQLAlchemy(app)
 from models import *
 
+# gunicorn logging
+if __name__ != '__main__':
+    gunicorn_logger = logging.getLogger('gunicorn.error')
+    app.logger.handlers = gunicorn_logger.handlers
+    app.logger.setLevel(gunicorn_logger.level)
+
 #Create web page routes
 
 @app.route('/', methods = ['POST', 'GET'])
 def index():
+
     posted = Slicer.query.order_by(Slicer.id.desc()).all()
+
     app.logger.info('TEST PRINT')
     # posted = 'TEST PRINT'
     return render_template('index.html', test = posted)
 
-@app.route('/status/<actionthing>/<name>/<success>', methods = ['POST', 'GET'])
+@app.route('/status/<actionthing>/<name>/<success>')
 def status(name,actionthing,success):
     slicers = uplynk.slicers
     if request.method == 'POST':
@@ -49,7 +57,7 @@ def login():
       return redirect(url_for('success',name = user))
 
 @app.route('/content_start', methods = ['POST', 'GET'])
-def start_slicer(methods = ['POST', 'GET']):
+def start_slicer():
   if request.method == 'POST':
       external_id = request.form['external_id']
       slicer = request.form['slicers']
@@ -100,4 +108,4 @@ def init():
 
 #Run App and startup
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0:5000')
