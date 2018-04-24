@@ -1,7 +1,7 @@
 version: '2'
 services:
   web:
-    restart: always
+    image: ferraro/flask-app:web-prod
     build:
       context: ./web
       dockerfile: Dockerfile
@@ -18,7 +18,7 @@ services:
     restart: always
     image: tutum/nginx:latest
     build:
-      context: ./nginx/
+      context: ./nginx
       dockerfile: Dockerfile
     ports:
       - "80:80"
