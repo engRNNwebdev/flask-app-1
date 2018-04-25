@@ -23,11 +23,9 @@ if __name__ != '__main__':
 
 @app.route('/', methods = ['POST', 'GET'])
 def index():
-
-    posted = Slicer.query.order_by(Slicer.id.desc()).all()
-
+    #posted = Slicer.query.order_by(Slicer.id.desc()).all()
     app.logger.info('TEST PRINT')
-    # posted = 'TEST PRINT'
+    posted = 'TEST PRINT'
     return render_template('index.html', test = posted)
 
 @app.route('/status/<actionthing>/<name>/<success>')
@@ -91,9 +89,12 @@ def uplynk_control():
 def preview():
     return render_template('preview.html');
 
-@app.route('/materialid')
+@app.route('/materialid', methods = ['POST', 'GET'])
 def material_id():
-  return 'Material ID page goes here'
+    if request.method == 'POST':
+        return render_template('materialid.html')
+    elif request.method == 'GET':
+        return render_template('materialid.html')
 
 @app.route('/init')
 def init():
@@ -105,6 +106,14 @@ def init():
     app.logger.info('Init slicers')
     posted = 'Initiated'
     return render_template('index.html', test = posted)
+
+@app.errorhandler(500)
+def internal_server_error(e):
+    return render_template('500.html'), 500
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
 
 #Run App and startup
 if __name__ == '__main__':

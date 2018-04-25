@@ -1,6 +1,44 @@
-<html>
-  <body>
-    <h1>Select Rundown</h1>
-    
-  </body>
-</html>
+{# This simple template derives from ``base.html``.
+  See ``base.html`` for more information about template inheritance. #}
+  {%- extends "base.html" %}
+
+  {# Loads some of the macros included with Flask-Bootstrap.
+    We are using the utils module here to automatically
+render Flask's flashed messages in a bootstrap friendly manner #}
+
+{% import "bootstrap/utils.html" as utils %}
+
+{% block content %}
+<div class="container">
+  <h1>Material ID Page</h1>
+  <ul class="nav nav-tabs nav-justified">
+    <li role="presentation"><h3><a href="#">Long Island</a></h3>
+      <ul class="list-group">
+        <li class="list-group-item">Cras justo odio</li>
+        <li class="list-group-item">Dapibus ac facilisis in</li>
+        <li class="list-group-item">Morbi leo risus</li>
+        <li class="list-group-item">Porta ac consectetur ac</li>
+        <li class="list-group-item">Vestibulum at eros</li>
+      </ul>
+    </li>
+    <li role="presentation"><h3><a href="#">New Jersey</a></h3>
+      <ul class="list-group">
+        <li class="list-group-item">Cras justo odio</li>
+        <li class="list-group-item">Dapibus ac facilisis in</li>
+        <li class="list-group-item">Morbi leo risus</li>
+        <li class="list-group-item">Porta ac consectetur ac</li>
+        <li class="list-group-item">Vestibulum at eros</li>
+      </ul>
+    </li>
+    <li role="presentation"><h3><a href="#">Hudson Valley</a></h3>
+      <ul class="list-group">
+        <li class="list-group-item">Cras justo odio</li>
+        <li class="list-group-item">Dapibus ac facilisis in</li>
+        <li class="list-group-item">Morbi leo risus</li>
+        <li class="list-group-item">Porta ac consectetur ac</li>
+        <li class="list-group-item">Vestibulum at eros</li>
+      </ul></li>
+  </ul>
+</div>
+
+{% endblock %}

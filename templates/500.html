@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}Page Not Found{% endblock %}
+{% block body %}
+  <h1>Internal Server Error</h1>
+  <p>Something went wrong on the server side</p>
+  <p><a href="{{ url_for('index') }}">Go Home and report the issue</a>
+{% endblock %}
