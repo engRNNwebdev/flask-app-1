@@ -2,6 +2,7 @@
 {% import "bootstrap/utils.html" as utils %}
 {% block content %}
 <div class="container">
+  <div class="jumbotron">
   {%- with messages = get_flashed_messages(with_categories=True) %}
   {%- if messages %}
     <div class="row">
@@ -9,6 +10,8 @@
         {{utils.flashed_messages(messages)}}
       </div>
     </div>
+  </div>
+</div>
   {%- endif %}
   {%- endwith %}
   <form action="" method="post">
