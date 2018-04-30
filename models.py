@@ -20,6 +20,16 @@ class Slicer(db.Model):
     #     self.text = text
     #     self.date_posted = datetime.datetime.now()
 
+class MosObject(db.Model):
+
+    __tablename__ = 'mosids'
+
+    id = db.Column(db.Integer, primary_key=True)
+    storySlug = db.Column(db.String, nullable=False)
+    objID = db.Column(db.String, nullable=False)
+    mosAbstract = db.Column(db.String, nullable=False)
+    roID = db.Column(db.String, nullable=False)
+    storyID = db.Column(db.String, nullable=False)
 # [
 #   {
 #     "slicer_id": "rnnuplynk1",

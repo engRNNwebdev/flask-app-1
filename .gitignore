@@ -1,3 +1,7 @@
+#test files
+testroStorySend.xml
+NRM_msg.xml
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
