@@ -43,15 +43,29 @@
 <div class="container">
   <nav class="navbar navbar-default" role="navigation">
     <div class="navbar-header">
+      {% if current_user.is_anonymous %}
       <a class="navbar-brand" href="/">
           <span class="glyphicon glyphicon"></span>
           RNN Engineering
       </a>
+      {% else %}
+      <a class="navbar-brand" href="/">
+        <span class="glyphicon glypicon"></span>
+        RNN User: {{ current_user.username }}
+      </a>
+      {% endif %}
     </div>
     <ul class="nav navbar-nav pull-right">
+      <li><a href="#">User: {{ current_user.username }}</a></li>
       <li><a href="/uplynk">Uplynk Control</a></li>
       <li><a href="/preview">Uplynk Preview</a></li>
       <li><a href="/materialid">Material IDs</a></li>
+      <li><a href="{{ url_for('index') }}">Home</a></li>
+      {% if current_user.is_anonymous %}
+      <li><a href="{{ url_for('login') }}">Login</a></li>
+      {% else %}
+      <li><a href="{{ url_for('logout') }}">Logout</a></li>
+      {% endif %}
     </ul>
   </nav>
 </div>

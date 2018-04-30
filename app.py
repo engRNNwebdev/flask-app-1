@@ -1,7 +1,9 @@
 from flask import Flask, redirect, url_for, request, render_template
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy, SessionBase
+from flask_login import LoginManager, current_user, login_user, logout_user, login_required
 from config import BaseConfig
+from urlparse import urlparse
 import uplynk, os, logging
 from logging.handlers import RotatingFileHandler
 #Initialize app
@@ -10,8 +12,12 @@ app = Flask(__name__)
 Bootstrap(app)
 #Initialize Mongo Client
 app.config.from_object(BaseConfig)
+login = LoginManager(app)
+login.login_view = 'login'
 db = SQLAlchemy(app)
+
 from models import *
+from forms import *
 
 # gunicorn logging
 if __name__ != '__main__':
@@ -22,6 +28,7 @@ if __name__ != '__main__':
 #Create web page routes
 
 @app.route('/', methods = ['POST', 'GET'])
+@login_required
 def index():
     #posted = Slicer.query.order_by(Slicer.id.desc()).all()
     app.logger.info('TEST PRINT')
@@ -29,6 +36,7 @@ def index():
     return render_template('index.html', test = posted)
 
 @app.route('/status/<actionthing>/<name>/<success>')
+@login_required
 def status(name,actionthing,success):
     slicers = uplynk.slicers
     if request.method == 'POST':
@@ -47,14 +55,29 @@ def status(name,actionthing,success):
 
 @app.route('/login', methods = ['POST', 'GET'])
 def login():
-  if request.method == 'POST':
-      user = request.form['nm']
-      return redirect(url_for('success',name = user))
-  else:
-      user = request.args.get('nm')
-      return redirect(url_for('success',name = user))
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=form.username.data).first()
+        if user is None or not user.check_password(form.password.data):
+            flash('Invalid username or password')
+            return redirect(url_for('login'))
+        login_user(user, remember=form.remember_me.data)
+        next_page = request.args.get('next')
+        if not next_page or urlparse(next_page).netloc != '':
+            next_page = url_for('index')
+        return redirect(next_page)
+    return render_template('login.html', title='Sign In', form=form)
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
 
 @app.route('/content_start', methods = ['POST', 'GET'])
+@login_required
 def start_slicer():
   if request.method == 'POST':
       external_id = request.form['external_id']
@@ -68,6 +91,7 @@ def start_slicer():
       return redirect(url_for('status', actionthing = 'start', name = sliced, success = False))
 
 @app.route('/blackout', methods = ['POST', 'GET'])
+@login_required
 def blackout_slicer():
   if request.method == 'POST':
       slicer = request.form['slicers']
@@ -79,6 +103,7 @@ def blackout_slicer():
       return redirect(url_for('status', actionthing = 'stop', name = sliced, success = False))
 
 @app.route('/uplynk')
+@login_required
 def uplynk_control():
     db_slicers = Slicer.query.order_by(Slicer.id.desc()).all()
     app.logger.info(db_slicers)
@@ -86,10 +111,12 @@ def uplynk_control():
     return render_template('uplynk_control.html',slicers=db_slicers, worky = 'Select a Slicer and give the Asset a title and External ID (can be the same)')
 
 @app.route('/preview')
+@login_required
 def preview():
     return render_template('preview.html');
 
 @app.route('/materialid', methods = ['POST', 'GET'])
+@login_required
 def material_id():
     if request.method == 'POST':
         return render_template('materialid.html')
@@ -97,6 +124,7 @@ def material_id():
         return render_template('materialid.html')
 
 @app.route('/init')
+@login_required
 def init():
     uplynk1 = Slicer(slicer_id=os.getenv('SLICER_ID_ONE'), address=os.getenv('SLICER_ADDRESS_ONE'), port=os.getenv('SLICER_PORT_ONE'), channel_id=os.getenv('SLICER_CHANNEL_ID_ONE'))
     uplynk2 = Slicer(slicer_id=os.getenv('SLICER_ID_TWO'), address=os.getenv('SLICER_ADDRESS_TWO'), port=os.getenv('SLICER_PORT_TWO'), channel_id=os.getenv('SLICER_CHANNEL_ID_TWO'))
