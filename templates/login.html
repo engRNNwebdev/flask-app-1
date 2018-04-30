@@ -3,30 +3,27 @@
 {% block content %}
 <div class="container">
   <div class="jumbotron">
-  {%- with messages = get_flashed_messages(with_categories=True) %}
-  {%- if messages %}
+    {%- with messages = get_flashed_messages(with_categories=True) %} {%- if messages %}
     <div class="row">
       <div class="col-md-12">
         {{utils.flashed_messages(messages)}}
       </div>
     </div>
-  </div>
-</div>
-  {%- endif %}
-  {%- endwith %}
-  <form action="" method="post">
+    {%- endif %} {%- endwith %}
+    <form action="" method="post">
       {{ form.hidden_tag() }}
       <p>
-          {{ form.username.label }}<br>
-          {{ form.username(size=32) }}
+        {{ form.username.label }}<br>
+        {{ form.username(size=32) }}
       </p>
       <p>
-          {{ form.password.label }}<br>
-          {{ form.password(size=32) }}
+        {{ form.password.label }}<br>
+        {{ form.password(size=32) }}
       </p>
       <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
-      <input class="btn btn-default" type="submit" value="Login"/>
-    <!--  <p>{{ form.submit() }}</p> -->
-  </form>
+      <input class="btn btn-default" type="submit" value="Login" />
+      <!--  <p>{{ form.submit() }}</p> -->
+    </form>
+  </div>
 </div>
 {% endblock %}
