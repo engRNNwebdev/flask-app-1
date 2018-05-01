@@ -1,0 +1,51 @@
+{# This simple template derives from ``base.html``. See ``base.html`` for
+   more information about template inheritance. #}
+{%- extends "base.html" %}
+
+{# Loads some of the macros included with Flask-Bootstrap. We are using the
+   utils module here to automatically render Flask's flashed messages in a
+   bootstrap friendly manner #}
+{% import "bootstrap/utils.html" as utils %}
+
+{# Inside the ``content`` is where you should place most of your own stuff.
+   This will keep scripts at the page end and a navbar you add on later
+   intact. #}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="jumbotron col-md-4">
+      <form>
+        <div class="form-group">
+          <label for="exampleFormControlFile1"><h2>Upload Log File</h2></label>
+          <input type="file" class="form-control-file" id="exampleFormControlFile1">
+        </div>
+      </form>
+    </div>
+    <div class="jumbotron col-md-offset-5">
+      <!-- <h2>Filter Options</h2> -->
+      <div class="row">
+        <div class="col-md-6">
+          <label for="manualLogSearch">Filter Options</label>
+          <!-- <span class="input-group-addon" id="basic-addon2">Type search</span> -->
+          <input type="text" class="form-control" placeholder="Search the logs manually here" aria-describedby="basic-addon2">
+        </div>
+        <div class="col-md-offset-6">
+          <label for="exampleFormControlSelect2">Select Search Terms</label>
+          <select multiple class="form-control" id="exampleFormControlSelect2">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="jumbotron" margin="1em">
+    <h2 class="text-center">Results</h2>
+  </div>
+</div>
+{%- endblock %}

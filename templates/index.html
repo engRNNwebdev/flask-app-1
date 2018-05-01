@@ -26,15 +26,13 @@
       <h1>Welcome to RNN-Engineering</h1>
       <p>Web tools to control and view RNN Engineering equipment and data. Based off of:
         <a href="http://pythonhosted.org/Flask-Bootstrap">
-      Flask-Bootstrap</a>.</p>
-
+      Flask-Bootstrap</a>. The <a href="https://github.com/jofandaj0f/flask-app">Github repository</a>
+      contains the code base for this web application.</p>
       </div>
-      <ul class="list-group pull-left">
-        <li class="list-group-item"><a href="http://www.fios1news.com/longisland/live">Long Island (LI)</a></li>
-        <li class="list-group-item"><a href="http://www.fios1news.com/newjersey/live">New Jersey (NJ)</a></li>
-        <li class="list-group-item"><a href="http://www.fios1news.com/lowerhudsonvalley/live">Lower Hudson Valley (LHV)</a></li>
-        <li class="list-group-item"><a href="http://rnnmaneng-v:8030/">Change Passwords</a></li>
-        <li class="list-group-item"><a href="http://rnnmaneng-v:8080/">Service Desk</a></li>
+      <ul class="list-group col-md-5">
+        {% for key, value in web.items() %}
+            <li class="list-group-item"><a href="{{ value }}" target="_blank">{{ key }}</a></li>
+        {% endfor %}
       </ul>
     </div>
 {%- endblock %}

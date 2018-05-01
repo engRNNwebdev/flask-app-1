@@ -34,6 +34,9 @@ class MosObject(db.Model):
     mosAbstract = db.Column(db.String, nullable=False)
     roID = db.Column(db.String, nullable=False)
     storyID = db.Column(db.String, nullable=False)
+    def __repr__(self):
+        return "<User(storySlug='%s', objID='%s', mosAbstract='%s', roID='%s', storyID='%s')>" % (
+                                self.storySlug, self.objID, self.mosAbstract, self.roID, self.storyID)
 
 class User(UserMixin, db.Model):
 
@@ -49,6 +52,14 @@ class User(UserMixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+class Link(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), index=True, unique=True)
+    url = db.Column(db.String(200), index=True, unique=True)
+
+    def __repr__(self):
+        return "<User(name='%s', url='%s')>" % (
+                                self.name, self.url)
 # [
 #   {
 #     "slicer_id": "rnnuplynk1",

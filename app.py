@@ -1,10 +1,10 @@
-from flask import Flask, redirect, url_for, request, render_template
+from flask import Flask, redirect, url_for, request, render_template, flash
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy, SessionBase
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required
 from config import BaseConfig
 from urlparse import urlparse
-import uplynk, os, logging
+import uplynk, os, logging, links
 from logging.handlers import RotatingFileHandler
 #Initialize app
 app = Flask(__name__)
@@ -30,10 +30,11 @@ if __name__ != '__main__':
 @app.route('/', methods = ['POST', 'GET'])
 @login_required
 def index():
+    web = links.links()
     #posted = Slicer.query.order_by(Slicer.id.desc()).all()
-    app.logger.info('TEST PRINT')
-    posted = 'TEST PRINT'
-    return render_template('index.html', test = posted)
+    app.logger.info('Index Page Loaded')
+    app.logger.info(web)
+    return render_template('index.html', web = web)
 
 @app.route('/status/<actionthing>/<name>/<success>')
 @login_required
@@ -113,7 +114,12 @@ def uplynk_control():
 @app.route('/preview')
 @login_required
 def preview():
-    return render_template('preview.html');
+    return render_template('preview.html')
+
+@app.route('/loganalysis')
+@login_required
+def loganalysis():
+    return render_template('parser.html')
 
 @app.route('/materialid', methods = ['POST', 'GET'])
 @login_required
@@ -123,17 +129,17 @@ def material_id():
     elif request.method == 'GET':
         return render_template('materialid.html')
 
-@app.route('/init')
-@login_required
-def init():
-    uplynk1 = Slicer(slicer_id=os.getenv('SLICER_ID_ONE'), address=os.getenv('SLICER_ADDRESS_ONE'), port=os.getenv('SLICER_PORT_ONE'), channel_id=os.getenv('SLICER_CHANNEL_ID_ONE'))
-    uplynk2 = Slicer(slicer_id=os.getenv('SLICER_ID_TWO'), address=os.getenv('SLICER_ADDRESS_TWO'), port=os.getenv('SLICER_PORT_TWO'), channel_id=os.getenv('SLICER_CHANNEL_ID_TWO'))
-    db.session.add_all([uplynk1, uplynk2])
-    # db.session.add(uplynk2)
-    db.session.commit()
-    app.logger.info('Init slicers')
-    posted = 'Initiated'
-    return render_template('index.html', test = posted)
+# @app.route('/init')
+# @login_required
+# def init():
+#     uplynk1 = Slicer(slicer_id=os.getenv('SLICER_ID_ONE'), address=os.getenv('SLICER_ADDRESS_ONE'), port=os.getenv('SLICER_PORT_ONE'), channel_id=os.getenv('SLICER_CHANNEL_ID_ONE'))
+#     uplynk2 = Slicer(slicer_id=os.getenv('SLICER_ID_TWO'), address=os.getenv('SLICER_ADDRESS_TWO'), port=os.getenv('SLICER_PORT_TWO'), channel_id=os.getenv('SLICER_CHANNEL_ID_TWO'))
+#     db.session.add_all([uplynk1, uplynk2])
+#     # db.session.add(uplynk2)
+#     db.session.commit()
+#     app.logger.info('Init slicers')
+#     posted = 'Initiated'
+#     return render_template('index.html', test = posted)
 
 @app.errorhandler(500)
 def internal_server_error(e):
