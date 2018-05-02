@@ -31,15 +31,16 @@ if __name__ != '__main__':
 @login_required
 def index():
     web = links.links()
-    #posted = Slicer.query.order_by(Slicer.id.desc()).all()
+    web_prod = links.links_prod()
+    web_it = links.links_it()
+    web_ftp = links.links_ftp()
+    web_broadcast = links.links_broadcast()
     app.logger.info('Index Page Loaded')
-    app.logger.info(web)
-    return render_template('index.html', web = web)
+    return render_template('index.html', web=web, web_prod=web_prod, web_it=web_it, web_ftp=web_ftp, web_broadcast=web_broadcast)
 
 @app.route('/status/<actionthing>/<name>/<success>')
 @login_required
 def status(name,actionthing,success):
-    slicers = uplynk.slicers
     if request.method == 'POST':
         if success:
             if actionthing == 'stop':
@@ -108,7 +109,6 @@ def blackout_slicer():
 def uplynk_control():
     db_slicers = Slicer.query.order_by(Slicer.id.desc()).all()
     app.logger.info(db_slicers)
-    slicers = uplynk.slicers
     return render_template('uplynk_control.html',slicers=db_slicers, worky = 'Select a Slicer and give the Asset a title and External ID (can be the same)')
 
 @app.route('/preview')

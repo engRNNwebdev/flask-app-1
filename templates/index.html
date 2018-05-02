@@ -12,27 +12,59 @@
    This will keep scripts at the page end and a navbar you add on later
    intact. #}
 {% block content %}
-  <div class="container">
-  {%- with messages = get_flashed_messages(with_categories=True) %}
-  {%- if messages %}
-    <div class="row">
-      <div class="col-md-12">
-        {{utils.flashed_messages(messages)}}
-      </div>
+<div class="container">
+  {%- with messages = get_flashed_messages(with_categories=True) %} {%- if messages %}
+  <div class="row">
+    <div class="col-md-12">
+      {{utils.flashed_messages(messages)}}
     </div>
-  {%- endif %}
-  {%- endwith %}
-    <div class="jumbotron">
-      <h1>Welcome to RNN-Engineering</h1>
-      <p>Web tools to control and view RNN Engineering equipment and data. Based off of:
-        <a href="http://pythonhosted.org/Flask-Bootstrap">
-      Flask-Bootstrap</a>. The <a href="https://github.com/jofandaj0f/flask-app">Github repository</a>
-      contains the code base for this web application.</p>
-      </div>
-      <ul class="list-group col-md-5">
-        {% for key, value in web.items() %}
-            <li class="list-group-item"><a href="{{ value }}" target="_blank">{{ key }}</a></li>
-        {% endfor %}
-      </ul>
-    </div>
+  </div>
+  {%- endif %} {%- endwith %}
+  <div class="jumbotron">
+    <h1>Welcome to RNN-Engineering</h1>
+    <p>Web tools to control and view RNN Engineering equipment and data. Based off of:
+      <a href="http://pythonhosted.org/Flask-Bootstrap">
+      Flask-Bootstrap</a>. The <a href="https://github.com/jofandaj0f/flask-app">Github repository</a> contains the code base for this web application.</p>
+  </div>
+  <br/>
+  <!-- <label><h4>Production</h4></label>
+
+  <ul class="list-group">
+
+    {% for key, value in web_prod.items() %}
+    <li class="list-group-item col-md-4"><a href="{{ value }}" target="_blank">{{ key }}</a></li>
+    {% endfor %}
+  </ul>
+  <br/>
+  <label><h4>Corp IT</h4></label>
+  <ul class="list-group">
+
+    {% for key, value in web_it.items() %}
+    <li class="list-group-item col-md-4"><a href="{{ value }}" target="_blank">{{ key }}</a></li>
+    {% endfor %}
+  </ul>
+  <br/>
+  <label><h4>FTP Sites</h4></label>
+  <ul class="list-group">
+
+    {% for key, value in web_ftp.items() %}
+    <li class="list-group-item col-md-4"><a href="{{ value }}" target="_blank">{{ key }}</a></li>
+    {% endfor %}
+  </ul>
+  <br/>
+  <label><h4>Broadcast</h4></label>
+  <ul class="list-group">
+
+    {% for key, value in web_broadcast.items() %}
+    <li class="list-group-item col-md-4"><a href="{{ value }}" target="_blank">{{ key }}</a></li>
+    {% endfor %}
+  </ul> -->
+  <div class="row">
+    {% for key, value in web.items() %}
+    <li class="list-group-item col-md-4"><a href="{{ value }}" target="_blank">{{ key }}</a></li>
+    {% endfor %}
+  </div>
+</div>
+
+
 {%- endblock %}

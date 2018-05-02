@@ -60,17 +60,3 @@ class Link(db.Model):
     def __repr__(self):
         return "<User(name='%s', url='%s')>" % (
                                 self.name, self.url)
-# [
-#   {
-#     "slicer_id": "rnnuplynk1",
-#     "address": "192.168.101.15",
-#     "port": 65009,
-#     "channel_id": "Fios1News Long Island PGM"
-#   },
-#   {
-#     "slicer_id": "rnnuplynk2",
-#     "address": "192.168.101.15",
-#     "port": 65011,
-#     "channel_id": "Fios1News Long Island CLN"
-#   }
-# ]
