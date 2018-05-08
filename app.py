@@ -7,7 +7,6 @@ from urlparse import urlparse
 import uplynk, os, logging, links, re, shutil
 from logging.handlers import RotatingFileHandler
 from werkzeug.utils import secure_filename
-UPLOAD_FOLDER = os.getenv('UPLOAD_FOLDER')
 ALLOWED_EXTENSIONS = set(['txt'])
 
 #Initialize app
@@ -16,7 +15,7 @@ app = Flask(__name__)
 Bootstrap(app)
 #Initialize Login, Postgres and Upload folder
 app.config.from_object(BaseConfig)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['UPLOAD_FOLDER'] = os.getenv('UPLOAD_FOLDER')
 login = LoginManager(app)
 login.login_view = 'login'
 db = SQLAlchemy(app)
