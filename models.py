@@ -20,9 +20,6 @@ class Slicer(db.Model):
     def __repr__(self):
         return "<User(slicer_id='%s', address='%s', port='%s', channel_id='%s')>" % (
                                 self.slicer_id, self.address, self.port, self.channel_id)
-    # def __init__(self, text):
-    #     self.text = text
-    #     self.date_posted = datetime.datetime.now()
 
 class MosObject(db.Model):
 
@@ -53,6 +50,9 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password_hash, password)
 
 class Link(db.Model):
+
+    __tablename__ = 'links'
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), index=True, unique=True)
     url = db.Column(db.String(200), index=True, unique=True)

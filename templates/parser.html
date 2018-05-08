@@ -11,41 +11,111 @@
    This will keep scripts at the page end and a navbar you add on later
    intact. #}
 
+{% block scripts %}
+  {{super()}}
+  <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> -->
+<script type="text/javascript" src="http://cdn.bootcss.com/bootstrap-select/2.0.0-beta1/js/bootstrap-select.js"></script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('.selectpicker').selectpicker();
+    $('.selectpicker').on('change', function(e) {
+      console.log('clicky click click',this.value,
+        // this.options[this.selectedIndex].value,
+        $(this).find("option:selected").val());
+      searchLog(this.value);
+    });
+    $('#inputQuery').on('keyup', function(e){
+      // console.log('typey type type',this.value);
+      searchLog(this.value);
+    });
+  });
+
+  function searchLog(value) {
+    // Declare variables
+    // console.log('This is the value: ', value);
+    var input, filter, ul, li, a, i;
+    // input = document.getElementById('inputQuery');
+    filter = value;//input.value.toUpperCase();
+    console.log(filter);
+    ul = document.getElementById('logdump');
+    li = ul.getElementsByTagName('div');
+    // console.log('Running Search Log: ', li.length);
+    // Loop through all list items, and hide those who don't match the search query
+    for (i = 0; i < li.length; i++) {
+      a = li[i].getElementsByTagName('p')[0];
+      if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        li[i].style.display = "";
+      } else {
+        li[i].style.display = "none";
+      }
+    }
+  }
+  function clearLogDump(){$('#logdump').empty();}
+</script>
+{% endblock %}
+
 {% block content %}
 <div class="container">
+  {%- with messages = get_flashed_messages(with_categories=True) %} {%- if messages %}
   <div class="row">
-    <div class="jumbotron col-md-4">
-      <form>
-        <div class="form-group">
-          <label for="exampleFormControlFile1"><h2>Upload Log File</h2></label>
-          <input type="file" class="form-control-file" id="exampleFormControlFile1">
-        </div>
-      </form>
+    <div class="col-md-12">
+      {{utils.flashed_messages(messages)}}
     </div>
-    <div class="jumbotron col-md-offset-5">
-      <!-- <h2>Filter Options</h2> -->
+  </div>
+  {%- endif %} {%- endwith %}
+  <!-- Upload file elements -->
+    <!-- Searching Options -->
+    <div class="jumbotron">
       <div class="row">
-        <div class="col-md-6">
-          <label for="manualLogSearch">Filter Options</label>
-          <!-- <span class="input-group-addon" id="basic-addon2">Type search</span> -->
-          <input type="text" class="form-control" placeholder="Search the logs manually here" aria-describedby="basic-addon2">
+        <div class="col-md-4" role="Uploading">
+          <form enctype=multipart/form-data action="/loganalysis" method="POST">
+            <div class="form-group">
+              <label for="exampleFormControlFile1"><h4>.txt files ONLY</h4></label>
+              <input type="file" class="form-control-file" name="file">
+              <br>
+              <input class="btn btn-primary" type="submit" value="Upload (.txt files Only)" />
+            </div>
+          </form>
         </div>
-        <div class="col-md-offset-6">
-          <label for="exampleFormControlSelect2">Select Search Terms</label>
-          <select multiple class="form-control" id="exampleFormControlSelect2">
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
-          </select>
+        <div class="col-md-6" role="Searching">
+          <h4 class="text-center">Filtering Options</h4>
+          <br>
+          <form>
+            <div class="input-group">
+              <select class="selectpicker" multiple title="Optional Search Params">
+                <option value="PLAY_E">PLAY_E</option>
+                <option value="CUE_E">CUE_E</option>
+                <option value="CMD">CMD</option>
+                <option value="get_e">get_e</option>
+                <option value="530">530</option>
+              </select><!-- /btn-group -->
+              <input type="text" class="form-control" onkeyup="searchLog()" placeholder="Search the logs manually here" id="inputQuery">
+            </div><!-- /input-group -->
+          </form>
+          <br>
+          <input class="btn btn-warning" onclick="clearLogDump()" id="clearLogDump" value="Clear Log Dump" />
         </div>
       </div>
     </div>
-  </div>
-
-  <div class="jumbotron" margin="1em">
-    <h2 class="text-center">Results</h2>
+    <!-- Results Jumbotron where the log is placed  -->
+    <div class="jumbotron" margin="5em">
+      <div class="row" >
+        <h3 class="text-center">Log Dump</h3>
+        {% for error in errors %}
+        <div class="col-md-12 text-center"><p>{{ error }}</p></div>
+        {% endfor %}
+      </div>
+      <div class="row" id="logdump">
+        {% for log in logentries %}
+        <div class="col-md-12 text-center" id="logentry"><p style='font-size:1em'>{{ log }}</p></div>
+        {% endfor %}
+      </div>
+    </div>
+    <form action="/init?option=1" method="POST">
+      <div class="form-group">
+        <input class="btn btn-danger" type="submit" value="DELETE LOGS FROM DISK" />
+      </div>
+    </form>
   </div>
 </div>
 {%- endblock %}
