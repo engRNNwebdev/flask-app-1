@@ -13,45 +13,10 @@
 
 {% block scripts %}
   {{super()}}
-  <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> -->
-<script type="text/javascript" src="http://cdn.bootcss.com/bootstrap-select/2.0.0-beta1/js/bootstrap-select.js"></script>
-<script type="text/javascript">
-  $(document).ready(function() {
-    $('.selectpicker').selectpicker();
-    $('.selectpicker').on('change', function(e) {
-      console.log('clicky click click',this.value,
-        // this.options[this.selectedIndex].value,
-        $(this).find("option:selected").val());
-      searchLog(this.value);
-    });
-    $('#inputQuery').on('keyup', function(e){
-      // console.log('typey type type',this.value);
-      searchLog(this.value);
-    });
-  });
-
-  function searchLog(value) {
-    // Declare variables
-    // console.log('This is the value: ', value);
-    var input, filter, ul, li, a, i;
-    // input = document.getElementById('inputQuery');
-    filter = value;//input.value.toUpperCase();
-    console.log(filter);
-    ul = document.getElementById('logdump');
-    li = ul.getElementsByTagName('div');
-    // console.log('Running Search Log: ', li.length);
-    // Loop through all list items, and hide those who don't match the search query
-    for (i = 0; i < li.length; i++) {
-      a = li[i].getElementsByTagName('p')[0];
-      if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
-        li[i].style.display = "";
-      } else {
-        li[i].style.display = "none";
-      }
-    }
-  }
-  function clearLogDump(){$('#logdump').empty();}
-</script>
+<!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> -->
+<script type="text/javascript" src="http://cdn.bootcss.com/bootstrap-select/2.0.0-beta1/js/bootstrap-select.min.js"></script>
+<!-- <script type="text/text/javascript" src="/static/js/bootstrap-select.min.js"></script> -->
+<script type="text/javascript" src="/static/js/search.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -63,10 +28,9 @@
     </div>
   </div>
   {%- endif %} {%- endwith %}
-  <!-- Upload file elements -->
-    <!-- Searching Options -->
     <div class="jumbotron">
       <div class="row">
+        <!-- Upload file elements -->
         <div class="col-md-4" role="Uploading">
           <form enctype=multipart/form-data action="/loganalysis" method="POST">
             <div class="form-group">
@@ -77,6 +41,7 @@
             </div>
           </form>
         </div>
+        <!-- Searching Options -->
         <div class="col-md-6" role="Searching">
           <h4 class="text-center">Filtering Options</h4>
           <br>
@@ -89,7 +54,7 @@
                 <option value="get_e">get_e</option>
                 <option value="530">530</option>
               </select><!-- /btn-group -->
-              <input type="text" class="form-control" onkeyup="searchLog()" placeholder="Search the logs manually here" id="inputQuery">
+              <input type="text" class="form-control" onkeyup="searchLog(this.value)" placeholder="Search the logs manually here" id="inputQuery">
             </div><!-- /input-group -->
           </form>
           <br>
@@ -97,9 +62,9 @@
         </div>
       </div>
     </div>
-    <!-- Results Jumbotron where the log is placed  -->
+    <!-- Results Jumbotron where the log entries are placed  -->
     <div class="jumbotron" margin="5em">
-      <div class="row" >
+      <div class="row">
         <h3 class="text-center">Log Dump</h3>
         {% for error in errors %}
         <div class="col-md-12 text-center"><p>{{ error }}</p></div>
@@ -107,7 +72,7 @@
       </div>
       <div class="row" id="logdump">
         {% for log in logentries %}
-        <div class="col-md-12 text-center" id="logentry"><p style='font-size:1em'>{{ log }}</p></div>
+        <div class="col-md-12 text-center" id="logentry" value="{{ num }}"><p style='font-size:1em'>{{ log }}</p></div>
         {% endfor %}
       </div>
     </div>

@@ -16,11 +16,42 @@
     background-color: #f6f6f6; /* Grey background color */
     padding: 12px; /* Add some padding */
     text-decoration: none; /* Remove default text underline */
-    font-size: 18px; /* Increase the font-size */
-    color: black; /* Add a black text color */
     display: block; /* Make it into a block element to fill the whole list */
 }
 
 #logdump #logentry p:hover:not(.header) {
     background-color: #eee; /* Add a hover effect to all links, except for headers */
 }
+
+/*
+<!-- <label><h4>Production</h4></label>
+<div class="row">
+
+  {% for key, value in web_prod.items() %}
+  <div class="col-md-4"><a href="{{ value }}" target="_blank">{{ key }}</a></div>
+  {% endfor %}
+</div>
+<br/>
+<label><h4>Corp IT</h4></label>
+<div class="row">
+
+  {% for key, value in web_it.items() %}
+  <div class="col-md-4"><a href="{{ value }}" target="_blank">{{ key }}</a></div>
+  {% endfor %}
+</div>
+<br/>
+<label><h4>FTP Sites</h4></label>
+<div class="row">
+
+  {% for key, value in web_ftp.items() %}
+  <div class="col-md-4"><a href="{{ value }}" target="_blank">{{ key }}</a></div>
+  {% endfor %}
+</div>
+<br/>
+<label><h4>Broadcast</h4></label>
+<div class="row">
+
+  {% for key, value in web_broadcast.items() %}
+  <div class="col-md-4"><a href="{{ value }}" target="_blank">{{ key }}</a></div>
+  {% endfor %}
+</div> --> */

@@ -7,6 +7,10 @@
    bootstrap friendly manner #}
 {% import "bootstrap/utils.html" as utils %}
 
+{% block scripts %}
+{{super()}}
+<script type="text/javascript" src="/static/js/items.min.js"></script>
+{% endblock %}
 
 {# Inside the ``content`` is where you should place most of your own stuff.
    This will keep scripts at the page end and a navbar you add on later
@@ -25,45 +29,38 @@
     <p>Web tools to control and view RNN Engineering equipment and data. Based off of:
       <a href="http://pythonhosted.org/Flask-Bootstrap">
       Flask-Bootstrap</a>. The <a href="https://github.com/jofandaj0f/flask-app">Github repository</a> contains the code base for this web application.</p>
+    <form action="/item?mod=new" method="POST" class="form-group">
+      <div class="btn-group" role="group" aria-label="...">
+        <div class="input-group">
+          <span class="input-group-btn">
+            <button type="submit" class="btn btn-success">Submit</button>
+          </span>
+          <input type="text" class="form-control" placeholder="Enter Follow Up item here" name="itemText">
+        </div>
+      </div>
+    </form>
+    <br/>
+    <h2 class="text-center">Open Items</h2>
+    <br/>
+
+    <div class="row" id="logdump">
+      {% for item in items %}
+      <div class="btn-group" role="group" aria-label="...">
+        <button type="button" class="btn btn-danger" onclick="deleteItem(this.value)" value="{{ item.text }}">Mark Complete</button>
+        <button type="button" class="btn btn-default" id="itemThing">{{ item.text }}</button>
+      </div>
+      {% endfor %}
+    </div>
+    <br>
+
   </div>
   <br/>
-  <label><h4>Production</h4></label>
-  <div class="row">
-
-    {% for key, value in web_prod.items() %}
-    <div class="col-md-4"><a href="{{ value }}" target="_blank">{{ key }}</a></div>
-    {% endfor %}
+  <div class="jumbotron">
+    <div class="row">
+      {% for key, value in web.items() %}
+      <div class="col-md-4"><a href="{{ value }}" target="_blank">{{ key }}</a></div>
+      {% endfor %}
+    </div>
   </div>
-  <br/>
-  <label><h4>Corp IT</h4></label>
-  <div class="row">
-
-    {% for key, value in web_it.items() %}
-    <div class="col-md-4"><a href="{{ value }}" target="_blank">{{ key }}</a></div>
-    {% endfor %}
-  </div>
-  <br/>
-  <label><h4>FTP Sites</h4></label>
-  <div class="row">
-
-    {% for key, value in web_ftp.items() %}
-    <div class="col-md-4"><a href="{{ value }}" target="_blank">{{ key }}</a></div>
-    {% endfor %}
-  </div>
-  <br/>
-  <label><h4>Broadcast</h4></label>
-  <div class="row">
-
-    {% for key, value in web_broadcast.items() %}
-    <div class="col-md-4"><a href="{{ value }}" target="_blank">{{ key }}</a></div>
-    {% endfor %}
-  </div>
-  <!-- <div class="row">
-    {% for key, value in web.items() %}
-    <div class="col-md-4"><a href="{{ value }}" target="_blank">{{ key }}</a></div>
-    {% endfor %}
-  </div> -->
 </div>
-
-
 {%- endblock %}

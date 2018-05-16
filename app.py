@@ -29,16 +29,16 @@ if __name__ != '__main__':
     app.logger.handlers = gunicorn_logger.handlers
     app.logger.setLevel(gunicorn_logger.level)
 web = links.links()
-web_prod = links.links_prod()
-web_it = links.links_it()
-web_ftp = links.links_ftp()
-web_broadcast = links.links_broadcast()
+# web_prod = links.links_prod()
+# web_it = links.links_it()
+# web_ftp = links.links_ftp()
+# web_broadcast = links.links_broadcast()
 #Create web page routes
 @app.route('/', methods = ['POST', 'GET'])
 @login_required
 def index():
-    app.logger.info('Index Page Loaded')
-    return render_template('index.html', web=web, web_prod=web_prod, web_it=web_it, web_ftp=web_ftp, web_broadcast=web_broadcast)
+    items = Item.query.order_by(Item.id.desc()).all()
+    return render_template('index.html', web=web, items=items)
 
 @app.route('/status/<actionthing>/<name>/<success>')
 @login_required
@@ -145,16 +145,27 @@ def loganalysis():
             return render_template('parser.html', errors=errors)
         if file and allowed_file(file.filename):
             filename = secure_filename(file.filename)
+            app.logger.info(filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             os.chdir(r'/tmp/') #establish dir to pull file from
             logentries = []
             with open(filename, 'r') as f:
+                i = -1
                 for line in f:
+                    i += 1
                     try:
-                        logentries.append(line)
+                        logentries.append({i : line})
+                        # entry = Log(entry=line)
+                        # db.session.add(entry)
                     except:
                         logentries.append('Cannot add line :(\n')
+                        # app.logger.error('Cannot add line')
                 f.close()
+            #     try:
+            #         db.session.commit()
+            #     except:
+            #         app.logger.error('Characters might be too many')
+            # dblogentries = Log.query.all()
             return render_template('parser.html', logentries=logentries)
             # return redirect(url_for('uploaded_file', filename=filename))
         errors =['Welp, nothing happened']
@@ -188,6 +199,7 @@ def init():
                 except Exception as e:
                     print(e)
             errors = ['Logs have been deleted from disk']
+            Log.query.delete()
             return render_template('parser.html', errors=errors)
         if option == '2':
             uplynk1 = Slicer(slicer_id=os.getenv('SLICER_ID_ONE'), address=os.getenv('SLICER_ADDRESS_ONE'), port=os.getenv('SLICER_PORT_ONE'), channel_id=os.getenv('SLICER_CHANNEL_ID_ONE'))
@@ -204,6 +216,26 @@ def init():
     elif request.method == 'GET':
         app.info.logger('Attempted get on init page')
         return render_template('404.html')
+
+@app.route('/item', methods = ['POST', 'GET'])
+def create_item():
+    mod = request.args.get('mod')
+    if request.method == 'POST':
+        if mod == 'new':
+            text = request.form['itemText']
+            complete = False
+            user = current_user.username
+            item = Item(text=text, complete=complete, user=user)
+            db.session.add_all([item])
+            db.session.commit()
+            return redirect(url_for('index'))
+        if mod == 'del':
+            entry = request.form['item']
+            Item.query.filter_by(text=entry).delete()
+            db.session.commit()
+            return redirect(url_for('index'))
+    elif request.method == 'GET':
+        return redirect(url_for('404'))
 
 @app.errorhandler(500)
 def internal_server_error(e):

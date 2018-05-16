@@ -103,3 +103,7 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# Non-minified styling
+/static/css/main.css
+/static/js/search.js
