@@ -1,6 +1,7 @@
 from flask import Flask, redirect, url_for, request, render_template, flash, send_from_directory
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy, SessionBase
+from sqlalchemy.exc import IntegrityError
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required
 from config import BaseConfig
 from urlparse import urlparse
@@ -28,7 +29,7 @@ if __name__ != '__main__':
     gunicorn_logger = logging.getLogger('gunicorn.error')
     app.logger.handlers = gunicorn_logger.handlers
     app.logger.setLevel(gunicorn_logger.level)
-web = links.links()
+# web = links.links()
 # web_prod = links.links_prod()
 # web_it = links.links_it()
 # web_ftp = links.links_ftp()
@@ -38,6 +39,7 @@ web = links.links()
 @login_required
 def index():
     items = Item.query.order_by(Item.id.desc()).all()
+    web = Link.query.all()
     return render_template('index.html', web=web, items=items)
 
 @app.route('/status/<actionthing>/<name>/<success>')
@@ -150,24 +152,15 @@ def loganalysis():
             os.chdir(r'/tmp/') #establish dir to pull file from
             logentries = []
             with open(filename, 'r') as f:
-                i = -1
                 for line in f:
-                    i += 1
                     try:
-                        logentries.append({i : line})
-                        # entry = Log(entry=line)
-                        # db.session.add(entry)
+                        logentries.append(line)
                     except:
-                        logentries.append('Cannot add line :(\n')
-                        # app.logger.error('Cannot add line')
+                        logentries.append('Cannot add line :( \n')
+                        app.logger.error('Cannot add line \n')
                 f.close()
-            #     try:
-            #         db.session.commit()
-            #     except:
-            #         app.logger.error('Characters might be too many')
-            # dblogentries = Log.query.all()
-            return render_template('parser.html', logentries=logentries)
-            # return redirect(url_for('uploaded_file', filename=filename))
+            # return render_template('parser.html', logentries=logentries)
+            return redirect(url_for('uploaded_file', filename=filename))
         errors =['Welp, nothing happened']
         return render_template('parser.html', errors=errors)
     elif request.method == 'GET':
@@ -210,6 +203,18 @@ def init():
             app.logger.info('Init slicers')
             errors = ['db Initiation has been performed... Check data for confirmation.']
             return render_template('parser.html', errors=errors)
+        if option == '3':
+            name = request.form['linkName']
+            url = request.form['linkText']
+            category = request.form['linkCategory']
+            try:
+                link = Link(name=name, url=url, category=category)
+                db.session.add(link)
+                db.session.commit()
+                return redirect(url_for('index'))
+            except IntegrityError:
+                flash('This ID already exists')
+                return redirect(url_for('index'))
         else:
             app.logger.info('Failed post message')
             return render_template('404.html')

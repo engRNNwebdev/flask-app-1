@@ -55,12 +55,61 @@
 
   </div>
   <br/>
-  <div class="jumbotron">
-    <div class="row">
-      {% for key, value in web.items() %}
-      <div class="col-md-4"><a href="{{ value }}" target="_blank">{{ key }}</a></div>
-      {% endfor %}
+  <div class="jumbotron vertical-center">
+    <div class="container text-center">
+      <div class="row">
+        <h4>No Category</h4>
+        {% for link in web %}
+          {% if link.category == '' %}
+            <div class="btn btn-default"><a href="{{ link.url }}" style="text-decoration:none" target="_blank">{{ link.name }}</a></div>
+          {% endif %}
+        {% endfor %}
+      </div>
+      <div class="row">
+        {% for link in web %}
+          {% if link.category == 'Production' %}
+            <h4>Production</h4>
+            <div class="btn btn-default"><a href="{{ link.url }}" style="text-decoration:none" target="_blank">{{ link.name }}</a></div>
+          {% endif %}
+        {% endfor %}
+      </div>
+      <div class="row">
+        {% for link in web %}
+          {% if link.category == 'Broadcast' %}
+            <h4>Broadcast</h4>
+            <div class="btn btn-default"><a href="{{ link.url }}" style="text-decoration:none" target="_blank">{{ link.name }}</a></div>
+          {% endif %}
+        {% endfor %}
+      </div>
+      <div class="row">
+        {% for link in web %}
+          {% if link.category == 'IT' %}
+            <h4>IT</h4>
+            <div class="btn btn-default"><a href="{{ link.url }}" style="text-decoration:none" target="_blank">{{ link.name }}</a></div>
+          {% endif %}
+        {% endfor %}
+      </div>
+      <div class="row">
+        {% for link in web %}
+          {% if link.category == 'FTP' %}
+            <h4>FTP</h4>
+            <div class="btn btn-default"><a href="{{ link.url }}" style="text-decoration:none" target="_blank">{{ link.name }}</a></div>
+          {% endif %}
+        {% endfor %}
+      </div>
     </div>
+    <h3>Add a URL useful for documentation</h3>
+    <form action="/init?option=3" method="POST" class="form-group">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Enter the links Name" name="linkName">
+          <input type="text" class="form-control" placeholder="Enter the links URL" name="linkText">
+          <input type="text" class="form-control" placeholder="Enter the links Category" name="linkCategory">
+        </div>
+        <div class="btn-group" role="group" aria-label="...">
+          <button type="submit" class="btn btn-success">Submit</button>
+        </div>
+      </div>
+    </form>
   </div>
 </div>
 {%- endblock %}

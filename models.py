@@ -68,7 +68,7 @@ class Link(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), index=True, unique=True)
     url = db.Column(db.String(200), index=True, unique=True)
-    category = db.Column(db.String(64), index=True, nullable=False)
+    category = db.Column(db.String(64), index=True)
 
     def __repr__(self):
         return "<Link(name='%s', url='%d', category='%f')>" % (

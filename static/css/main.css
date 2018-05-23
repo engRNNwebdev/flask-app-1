@@ -23,6 +23,13 @@
     background-color: #eee; /* Add a hover effect to all links, except for headers */
 }
 
+.vertical-center {
+  min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
+  min-height: 100vh; /* These two lines are counted as one :-)       */
+
+  display: flex;
+  align-items: center;
+}
 /*
 <!-- <label><h4>Production</h4></label>
 <div class="row">
