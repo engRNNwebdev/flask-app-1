@@ -1,10 +1,7 @@
 version: '2'
 services:
   web:
-    image: ferraro/flask-app:web-prod
-    build:
-      context: ./web
-      dockerfile: Dockerfile
+    image: ferrarojespn/eng-web:web
     ports:
       - "5000:5000"
     links:
