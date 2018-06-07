@@ -1,8 +1,5 @@
 import urllib2, json
 
-slicers = [{'id' : 'rnnuplynk1', 'port' : 65009, 'ip': '192.168.101.15'},{'id' : 'rnnuplynk2', 'port' : 65011, 'ip' : '192.168.101.15'}]
-# slicers = {u'_id': '52a347343be0b32a070e5f4f', u'optid': u'52a347343be0b32a070e5f4e'}
-
 def content_start(portnum, external_id, title):
     SLICER_IP = "192.168.101.15"  # localhost
 

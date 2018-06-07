@@ -7,31 +7,109 @@
    bootstrap friendly manner #}
 {% import "bootstrap/utils.html" as utils %}
 
+{% block scripts %}
+{{super()}}
+<script type="text/javascript" src="/static/js/items.min.js"></script>
+{% endblock %}
 
 {# Inside the ``content`` is where you should place most of your own stuff.
    This will keep scripts at the page end and a navbar you add on later
    intact. #}
 {% block content %}
-  <div class="container">
-  {%- with messages = get_flashed_messages(with_categories=True) %}
-  {%- if messages %}
-    <div class="row">
-      <div class="col-md-12">
-        {{utils.flashed_messages(messages)}}
+<div class="container">
+  {%- with messages = get_flashed_messages(with_categories=True) %} {%- if messages %}
+  <div class="row">
+    <div class="col-md-12">
+      {{utils.flashed_messages(messages)}}
+    </div>
+  </div>
+  {%- endif %} {%- endwith %}
+  <div class="jumbotron">
+    <h1>Welcome to RNN-Engineering</h1>
+    <p>Web tools to control and view RNN Engineering equipment and data. Based off of:
+      <a href="http://pythonhosted.org/Flask-Bootstrap">
+      Flask-Bootstrap</a>. The <a href="https://github.com/jofandaj0f/flask-app">Github repository</a> contains the code base for this web application.</p>
+    <form action="/item?mod=new" method="POST" class="form-group">
+      <div class="btn-group" role="group" aria-label="...">
+        <div class="input-group">
+          <span class="input-group-btn">
+            <button type="submit" class="btn btn-success">Submit</button>
+          </span>
+          <input type="text" class="form-control" placeholder="Enter Follow Up item here" name="itemText">
+        </div>
+      </div>
+    </form>
+    <br/>
+    <h2 class="text-center">Open Items</h2>
+    <br/>
+
+    <div class="row" id="logdump">
+      {% for item in items %}
+      <div class="btn-group" role="group" aria-label="...">
+        <button type="button" class="btn btn-danger" onclick="deleteItem(this.value)" value="{{ item.text }}">Mark Complete</button>
+        <button type="button" class="btn btn-default" id="itemThing">{{ item.text }}</button>
+      </div>
+      {% endfor %}
+    </div>
+    <br>
+
+  </div>
+  <br/>
+  <div class="jumbotron">
+    <div class="container">
+      <div class="row">
+        <h4>No Category</h4>
+        {% for link in web %}
+          {% if link.category == '' %}
+            <div class="btn btn-default"><a href="{{ link.url }}" style="text-decoration:none" target="_blank">{{ link.name }}</a></div>
+          {% endif %}
+        {% endfor %}
+      </div>
+      <div class="row">
+        {% for link in web %}
+          {% if link.category == 'Production' %}
+            <h4>Production</h4>
+            <div class="btn btn-default"><a href="{{ link.url }}" style="text-decoration:none" target="_blank">{{ link.name }}</a></div>
+          {% endif %}
+        {% endfor %}
+      </div>
+      <div class="row">
+        {% for link in web %}
+          {% if link.category == 'Broadcast' %}
+            <h4>Broadcast</h4>
+            <div class="btn btn-default"><a href="{{ link.url }}" style="text-decoration:none" target="_blank">{{ link.name }}</a></div>
+          {% endif %}
+        {% endfor %}
+      </div>
+      <div class="row">
+        {% for link in web %}
+          {% if link.category == 'IT' %}
+            <h4>IT</h4>
+            <div class="btn btn-default"><a href="{{ link.url }}" style="text-decoration:none" target="_blank">{{ link.name }}</a></div>
+          {% endif %}
+        {% endfor %}
+      </div>
+      <div class="row">
+        {% for link in web %}
+          {% if link.category == 'FTP' %}
+            <h4>FTP</h4>
+            <div class="btn btn-default"><a href="{{ link.url }}" style="text-decoration:none" target="_blank">{{ link.name }}</a></div>
+          {% endif %}
+        {% endfor %}
       </div>
     </div>
-  {%- endif %}
-  {%- endwith %}
-    <div class="jumbotron">
-      <h1>Welcome to RNN-Engineering</h1>
-      <p>Web tools to control and view RNN Engineering equipment and data. Based off of:
-        <a href="http://pythonhosted.org/Flask-Bootstrap">
-      Flask-Bootstrap</a>.</p>
-      <p>
-        <a class="btn btn-lg btn-default" role="button"
-           href="http://pythonhosted.org/Flask-Bootstrap" >Show docs</a>
-      </p>
-      <p> {{ test._id }} </p>
-    </div>
-   </div>
+    <h3>Add a URL useful for documentation</h3>
+    <form action="/init?option=3" method="POST" class="form-group">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Enter the links Name" name="linkName">
+          <input type="text" class="form-control" placeholder="Enter the links URL" name="linkText">
+          <input type="text" class="form-control" placeholder="Enter the links Category" name="linkCategory">
+        </div>
+        <div class="btn-group" role="group" aria-label="...">
+          <button type="submit" class="btn btn-success">Submit</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
 {%- endblock %}

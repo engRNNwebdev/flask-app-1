@@ -1,0 +1,32 @@
+data:
+  command: 'true'
+  image: 'postgres:latest'
+  volumes:
+    - /var/lib/postgresql
+nginx:
+  autoredeploy: true
+  image: 'dockercloud/haproxy:1.5.1'
+  links:
+    - web
+  ports:
+    - '80:80'
+    - '443:443'
+  restart: always
+  volumes:
+    - '/var/run/docker.sock:/var/run/docker.sock'
+postgres:
+  image: 'postgres:latest'
+  ports:
+    - '5432:5432'
+  restart: always
+  volumes_from:
+    - data
+web:
+  autoredeploy: true
+  command: '/usr/local/bin/gunicorn -w 2 -b :5000 app:app'
+  image: 'ferrarojespn/eng-web:web'
+  links:
+    - postgres
+  ports:
+    - '5000'
+  restart: always

@@ -1,0 +1,86 @@
+{# This simple template derives from ``base.html``. See ``base.html`` for
+   more information about template inheritance. #}
+{%- extends "base.html" %}
+
+{# Loads some of the macros included with Flask-Bootstrap. We are using the
+   utils module here to automatically render Flask's flashed messages in a
+   bootstrap friendly manner #}
+{% import "bootstrap/utils.html" as utils %}
+
+{# Inside the ``content`` is where you should place most of your own stuff.
+   This will keep scripts at the page end and a navbar you add on later
+   intact. #}
+
+{% block scripts %}
+  {{super()}}
+<!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> -->
+<script type="text/javascript" src="http://cdn.bootcss.com/bootstrap-select/2.0.0-beta1/js/bootstrap-select.min.js"></script>
+<!-- <script type="text/text/javascript" src="/static/js/bootstrap-select.min.js"></script> -->
+<script type="text/javascript" src="/static/js/search.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  {%- with messages = get_flashed_messages(with_categories=True) %} {%- if messages %}
+  <div class="row">
+    <div class="col-md-12">
+      {{utils.flashed_messages(messages)}}
+    </div>
+  </div>
+  {%- endif %} {%- endwith %}
+    <div class="jumbotron">
+      <div class="row">
+        <!-- Upload file elements -->
+        <div class="col-md-4" role="Uploading">
+          <form enctype=multipart/form-data action="/loganalysis" method="POST">
+            <div class="form-group">
+              <label for="exampleFormControlFile1"><h4>.txt files ONLY</h4></label>
+              <input type="file" class="form-control-file" name="file">
+              <br>
+              <input class="btn btn-primary" type="submit" value="Upload (.txt files Only)" />
+            </div>
+          </form>
+        </div>
+        <!-- Searching Options -->
+        <div class="col-md-6" role="Searching">
+          <h4 class="text-center">Filtering Options</h4>
+          <br>
+          <form>
+            <div class="input-group">
+              <select class="selectpicker" multiple title="Optional Search Params">
+                <option value="PLAY_E">PLAY_E</option>
+                <option value="CUE_E">CUE_E</option>
+                <option value="CMD">CMD</option>
+                <option value="get_e">get_e</option>
+                <option value="530">530</option>
+              </select><!-- /btn-group -->
+              <input type="text" class="form-control" onkeyup="searchLog(this.value)" placeholder="Search the logs manually here" id="inputQuery">
+            </div><!-- /input-group -->
+          </form>
+          <br>
+          <input class="btn btn-warning" onclick="clearLogDump()" id="clearLogDump" value="Clear Log Dump" />
+        </div>
+      </div>
+    </div>
+    <!-- Results Jumbotron where the log entries are placed  -->
+    <div class="jumbotron" margin="5em">
+      <div class="row">
+        <h3 class="text-center">Log Dump</h3>
+        {% for error in errors %}
+        <div class="col-md-12 text-center"><p>{{ error }}</p></div>
+        {% endfor %}
+      </div>
+      <div class="row" id="logdump">
+        {% for log in logentries %}
+        <div class="col-md-12 text-center" id="logentry" value="{{ num }}"><p style='font-size:1em'>{{ log }}</p></div>
+        {% endfor %}
+      </div>
+    </div>
+    <form action="/init?option=1" method="POST">
+      <div class="form-group">
+        <input class="btn btn-danger" type="submit" value="DELETE LOGS FROM DISK" />
+      </div>
+    </form>
+  </div>
+</div>
+{%- endblock %}

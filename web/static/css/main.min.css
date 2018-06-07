@@ -1,6 +1,6 @@
 .jumbotron {
   margin-top: 1em;  // add a little space
-  border: 1px solid black;
+  border: 1px solid black ;
 }
 
 #logdump {
@@ -30,35 +30,3 @@
   display: flex;
   align-items: center;
 }
-/*
-<!-- <label><h4>Production</h4></label>
-<div class="row">
-
-  {% for key, value in web_prod.items() %}
-  <div class="col-md-4"><a href="{{ value }}" target="_blank">{{ key }}</a></div>
-  {% endfor %}
-</div>
-<br/>
-<label><h4>Corp IT</h4></label>
-<div class="row">
-
-  {% for key, value in web_it.items() %}
-  <div class="col-md-4"><a href="{{ value }}" target="_blank">{{ key }}</a></div>
-  {% endfor %}
-</div>
-<br/>
-<label><h4>FTP Sites</h4></label>
-<div class="row">
-
-  {% for key, value in web_ftp.items() %}
-  <div class="col-md-4"><a href="{{ value }}" target="_blank">{{ key }}</a></div>
-  {% endfor %}
-</div>
-<br/>
-<label><h4>Broadcast</h4></label>
-<div class="row">
-
-  {% for key, value in web_broadcast.items() %}
-  <div class="col-md-4"><a href="{{ value }}" target="_blank">{{ key }}</a></div>
-  {% endfor %}
-</div> --> */
