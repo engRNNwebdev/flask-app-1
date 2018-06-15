@@ -230,13 +230,9 @@ def create_item():
             text = request.form['itemText']
             complete = False
             user = current_user.username
-            category = request.form['itemCategory']
-            if len(text) >= 500:
-                flash('Task too long, please limit your entry to 500 characters')
-            else:
-                item = Item(text=text, complete=complete, user=user, category=category)
-                db.session.add_all([item])
-                db.session.commit()
+            item = Item(text=text, complete=complete, user=user)
+            db.session.add_all([item])
+            db.session.commit()
             return redirect(url_for('index'))
         if mod == 'del':
             entry = request.form['item']

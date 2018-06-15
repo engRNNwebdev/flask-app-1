@@ -50,6 +50,7 @@
         <button type="button" class="btn btn-default" id="itemThing">{{ item.text }}</button>
       </div>
     </div>
+    <br/>
     {% endfor %}
     <br/>
   </div>
@@ -64,34 +65,34 @@
           {% endif %}
         {% endfor %}
       </div>
+      <h4>Production</h4>
       <div class="row">
         {% for link in web %}
           {% if link.category == 'Production' %}
-            <h4>Production</h4>
             <div class="btn btn-default"><a href="{{ link.url }}" style="text-decoration:none" target="_blank">{{ link.name }}</a></div>
           {% endif %}
         {% endfor %}
       </div>
+      <h4>Broadcast</h4>
       <div class="row">
         {% for link in web %}
           {% if link.category == 'Broadcast' %}
-            <h4>Broadcast</h4>
             <div class="btn btn-default"><a href="{{ link.url }}" style="text-decoration:none" target="_blank">{{ link.name }}</a></div>
           {% endif %}
         {% endfor %}
       </div>
+      <h4>IT</h4>
       <div class="row">
         {% for link in web %}
           {% if link.category == 'IT' %}
-            <h4>IT</h4>
             <div class="btn btn-default"><a href="{{ link.url }}" style="text-decoration:none" target="_blank">{{ link.name }}</a></div>
           {% endif %}
         {% endfor %}
       </div>
+      <h4>FTP</h4>
       <div class="row">
         {% for link in web %}
           {% if link.category == 'FTP' %}
-            <h4>FTP</h4>
             <div class="btn btn-default"><a href="{{ link.url }}" style="text-decoration:none" target="_blank">{{ link.name }}</a></div>
           {% endif %}
         {% endfor %}
@@ -100,7 +101,7 @@
     <h5>Add a URL useful for documentation</h3>
     <form action="/init?option=3" method="POST" class="form-group">
       <span>
-        <select class="selectpicker" multiple title="Enter the Category" name="itemCategory">
+        <select class="selectpicker" title="Enter the Category" name="linkCategory">
           <option value="No Category" selected>No Category</option>
           <option value="Production">Production</option>
           <option value="Broadcast">Broadcast</option>
