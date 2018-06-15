@@ -9,6 +9,7 @@
 
 {% block scripts %}
 {{super()}}
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/2.0.0-beta1/js/bootstrap-select.min.js"></script>
 <script type="text/javascript" src="/static/js/items.min.js"></script>
 {% endblock %}
 
@@ -35,24 +36,22 @@
           <span class="input-group-btn">
             <button type="submit" class="btn btn-success">Submit</button>
           </span>
-          <input type="text" class="form-control" placeholder="Enter Follow Up item here" name="itemText">
+          <input type="text" class="form-control" placeholder="Enter Follow Up item here" name="itemText" maxlength="500">
         </div>
       </div>
     </form>
     <br/>
-    <h2 class="text-center">Open Items</h2>
+    <h2 class="text-center">Open Items for Engineering to resolve</h2>
     <br/>
-
-    <div class="row" id="logdump">
-      {% for item in items %}
+    {% for item in items %}
+    <div class="row">
       <div class="btn-group" role="group" aria-label="...">
         <button type="button" class="btn btn-danger" onclick="deleteItem(this.value)" value="{{ item.text }}">Mark Complete</button>
         <button type="button" class="btn btn-default" id="itemThing">{{ item.text }}</button>
       </div>
-      {% endfor %}
     </div>
-    <br>
-
+    {% endfor %}
+    <br/>
   </div>
   <br/>
   <div class="jumbotron">
@@ -98,12 +97,20 @@
         {% endfor %}
       </div>
     </div>
-    <h3>Add a URL useful for documentation</h3>
+    <h5>Add a URL useful for documentation</h3>
     <form action="/init?option=3" method="POST" class="form-group">
+      <span>
+        <select class="selectpicker" multiple title="Enter the Category" name="itemCategory">
+          <option value="No Category" selected>No Category</option>
+          <option value="Production">Production</option>
+          <option value="Broadcast">Broadcast</option>
+          <option value="IT">IT</option>
+          <option value="FTP">FTP</option>
+        </select>
+      </span>
         <div class="input-group">
           <input type="text" class="form-control" placeholder="Enter the links Name" name="linkName">
           <input type="text" class="form-control" placeholder="Enter the links URL" name="linkText">
-          <input type="text" class="form-control" placeholder="Enter the links Category" name="linkCategory">
         </div>
         <div class="btn-group" role="group" aria-label="...">
           <button type="submit" class="btn btn-success">Submit</button>

@@ -83,7 +83,7 @@ class Item(db.Model):
     __tablename__ = 'todo'
 
     id = db.Column(db.Integer, primary_key=True)
-    text = db.Column(db.String(64), index=True, unique=True)
+    text = db.Column(db.String(1000), index=True, unique=True)
     user = db.Column(db.String(64), index=True, unique=False)
     date_posted = db.Column(db.DateTime, nullable=False)
     complete = db.Column(db.Boolean(), index=True)

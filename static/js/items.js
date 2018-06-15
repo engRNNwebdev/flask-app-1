@@ -1,3 +1,9 @@
+$(document).ready(function(){
+  var picker=$(".selectpicker");
+  var input=$("#inputQuery");
+  picker.selectpicker();
+});
+
 function deleteItem(item) {
   console.log(item);
   $.ajax({
