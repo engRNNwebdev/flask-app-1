@@ -61,7 +61,9 @@
       <div class="row">
         <h4>No Category</h4>
         {% for link in web %}
-          {% if link.category == '' || link.category == 'No Category' %}
+          {% if link.category == '' %}
+            <div class="btn btn-default"><a href="{{ link.url }}" style="text-decoration:none" target="_blank">{{ link.name }}</a></div>
+          {% elif link.category == 'No Category' %}
             <div class="btn btn-default"><a href="{{ link.url }}" style="text-decoration:none" target="_blank">{{ link.name }}</a></div>
           {% endif %}
         {% endfor %}
