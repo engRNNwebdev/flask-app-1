@@ -135,14 +135,14 @@ def loganalysis():
     if request.method == 'POST':
         # check if the post request has the file part
         if 'file' not in request.files:
-            flash('No file part')
+            flash('Please select a file to upload')
             errors = ['No Results Available']
             return render_template('parser.html', errors=errors)
         file = request.files['file']
         # if user does not select file, browser also
         # submit a empty part without filename
         if file.filename == '':
-            flash('You have not selected a file to upload')
+            flash('No file name, please try again')
             errors = ['No Results Available']
             return render_template('parser.html', errors=errors)
         if file and allowed_file(file.filename):
@@ -155,8 +155,8 @@ def loganalysis():
                 for i, l in enumerate(f):
                     pass
             lines = i + 1
-            if lines >= 10000:
-                flash('File is too large, please limit to 10,000 lines \n or create a .txt file containing the start time to the end time of the error window.')
+            if lines >= 20000:
+                flash('File is too large, please limit to  \n or create a .txt file containing the start time to the end time of the error window.')
                 # return render_template('parser.html', logentries=logentries)
             else:
                 with open(filename, 'r') as f:
