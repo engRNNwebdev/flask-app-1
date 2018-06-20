@@ -142,7 +142,7 @@ def loganalysis():
         # if user does not select file, browser also
         # submit a empty part without filename
         if file.filename == '':
-            flash('No selected file')
+            flash('You have not selected a file to upload')
             errors = ['No Results Available']
             return render_template('parser.html', errors=errors)
         if file and allowed_file(file.filename):
@@ -152,15 +152,23 @@ def loganalysis():
             os.chdir(r'/tmp/') #establish dir to pull file from
             logentries = []
             with open(filename, 'r') as f:
-                for line in f:
-                    try:
-                        logentries.append(line)
-                    except:
-                        logentries.append('Cannot add line :( \n')
-                        app.logger.error('Cannot add line \n')
-                f.close()
-            # return render_template('parser.html', logentries=logentries)
-            return redirect(url_for('uploaded_file', filename=filename))
+                for i, l in enumerate(f):
+                    pass
+            lines = i + 1
+            if lines >= 10000:
+                flash('File is too large, please limit to 10,000 lines \n or create a .txt file containing the start time to the end time of the error window.')
+                # return render_template('parser.html', logentries=logentries)
+            else:
+                with open(filename, 'r') as f:
+                    for line in f:
+                        try:
+                            logentries.append(line)
+                        except:
+                            logentries.append('Cannot add line :( \n')
+                            app.logger.error('Cannot add line \n')
+                    f.close()
+            return render_template('parser.html', logentries=logentries)
+            # return redirect(url_for('uploaded_file', filename=filename))
         errors =['Welp, nothing happened']
         return render_template('parser.html', errors=errors)
     elif request.method == 'GET':
@@ -244,6 +252,9 @@ def create_item():
             return redirect(url_for('index'))
     elif request.method == 'GET':
         return redirect(url_for('404'))
+@app.errorhandler(413)
+def internal_server_error(e):
+    return render_template('413.html'), 413
 
 @app.errorhandler(500)
 def internal_server_error(e):

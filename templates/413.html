@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}Page Not Found{% endblock %}
+{% block body %}
+  <h1>File Too Large</h1>
+  <p>Please shorten your file length under 10,000 lines</p>
+  <p><a href="{{ url_for('index') }}">You have uploaded a file too large</a>
+{% endblock %}
