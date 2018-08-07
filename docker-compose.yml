@@ -1,7 +1,7 @@
 version: '2'
 services:
   web:
-    image: ferrarojespn/eng-web:web
+    image: ferraro/flask-app:web-prod
     ports:
       - "5000:5000"
     links:
