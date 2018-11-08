@@ -10,38 +10,18 @@ render Flask's flashed messages in a bootstrap friendly manner #}
 
 {% block content %}
 <div class="container">
-<h1>Uplynk Slicer Control</h1>
-<h3>{{ worky }}</h3>
-<div class="jumbotron">
-  <h3>Fios1News Long Island Program Feed</h3>
-  <iframe style="border:none" width="640" height="480" src="http://content.uplynk.com/player5/4SGwMggisdzBJx2nUGBDxtec.html"></iframe>
-  <ul class="list-group">
-    <li class="list-group-item embedHTML" state="expired" data-bind="css:{expired:channels.selectedItem().embed_player_url() === ''}">
-      <span class="key">Embed HTML</span>
-      <textarea class="value" readonly="readonly" data-bind="text:channels.embedHTML('flash')">&lt;iframe style="border:none" width="640" height="480" src="http://content.uplynk.com/player/4SGwMggisdzBJx2nUGBDxtec.html"&gt;&lt;/iframe&gt;</textarea>
-
-      <span class="key embedHTML5PlayerText">Embed HTML (HTML5 Player)</span>
-      <textarea class="value" readonly="readonly" data-bind="text:channels.embedHTML('html5')">&lt;iframe style="border:none" width="640" height="480" src="http://content.uplynk.com/player5/4SGwMggisdzBJx2nUGBDxtec.html"&gt;&lt;/iframe&gt;</textarea>
-    </li>
-  </ul>
-</div>
-<div role="separator" class="divider">
-
-</div>
-<div class="jumbotron">
-  <h3>Fios1News Long Island Clean Feed</h3>
-  <iframe style="border:none" width="640" height="480" src="http://content.uplynk.com/player5/1gKxPwzATcl6vab2vYocVpec.html"></iframe>
-  <ul class="list-group">
-
-    <li class="list-group-item" state="expired" data-bind="css:{expired:channels.selectedItem().embed_player_url() === ''}">
-      <span class="key">Embed HTML</span>
-      <textarea class="value" readonly="readonly" data-bind="text:channels.embedHTML('flash')">&lt;iframe style="border:none" width="640" height="480" src="http://content.uplynk.com/player/1gKxPwzATcl6vab2vYocVpec.html"&gt;&lt;/iframe&gt;</textarea>
-
-      <span class="key embedHTML5PlayerText">Embed HTML (HTML5 Player)</span>
-      <textarea class="value" readonly="readonly" data-bind="text:channels.embedHTML('html5')">&lt;iframe style="border:none" width="640" height="480" src="http://content.uplynk.com/player5/1gKxPwzATcl6vab2vYocVpec.html"&gt;&lt;/iframe&gt;</textarea>
-    </li>
-  </ul>
-</div>
+  <h1>AP Political Headlines</h1>
+  <div class="row">
+    {% for item in politicsitems %}
+    <div class="col-md-12"><h5>Headline: </h5>{{ item }}</div>
+    {% endfor %}
+  </div>
+  <h1>AP National Headlines</h1>
+  <div class="row">
+    {% for item in nationalitems %}
+    <div class="col-md-12"><h5>Headline: </h5>{{ item }}</div>
+    {% endfor %}
+  </div>
 </div>
 
 {% endblock %}

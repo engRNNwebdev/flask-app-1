@@ -5,7 +5,7 @@ from sqlalchemy.exc import IntegrityError
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required
 from config import BaseConfig
 from urlparse import urlparse
-import uplynk, os, logging, links, re, shutil
+import uplynk, os, logging, links, re, shutil, xml.etree.ElementTree as ET
 from logging.handlers import RotatingFileHandler
 from werkzeug.utils import secure_filename
 ALLOWED_EXTENSIONS = set(['txt'])
@@ -23,6 +23,7 @@ db = SQLAlchemy(app)
 
 from models import *
 from forms import *
+import enps
 
 # gunicorn logging
 if __name__ != '__main__':
@@ -252,6 +253,35 @@ def create_item():
             return redirect(url_for('index'))
     elif request.method == 'GET':
         return redirect(url_for('404'))
+
+@app.route('/headlines', methods = ['GET'])
+def headlines():
+    enps.loadNational()
+    enps.loadPolitics()
+    tree1 = ET.parse('politics.xml')
+    app.logger.info(tree1)
+    tree2 = ET.parse('national.xml')
+    # get root element
+    root1 = tree1.getroot()
+    app.logger.info(root1)
+    root2 = tree2.getroot()
+    # create empty list for news items
+    politicsitems = []
+    nationalitems = []
+    # iterate news items
+    namespaces = {'xmlns' : "http://www.w3.org/2005/Atom", 'apcm': 'http://ap.org/schemas/03/2005/apcm', 'apnm':"http://ap.org/schemas/03/2005/apnm", 'georss' : "http://www.georss.org/georss", 'o' : "http://w3.org/ns/odrl/2/"} # add more as needed
+    for headline in root1.findall('{http://www.w3.org/2005/Atom}entry'):
+        content = headline.find('{http://ap.org/schemas/03/2005/apcm}ContentMetadata')
+        title = content.find('{http://ap.org/schemas/03/2005/apcm}HeadLine')
+        print title.text
+        politicsitems.append(title.text)
+    for headline in root2.findall('{http://www.w3.org/2005/Atom}entry'):
+        content = headline.find('{http://ap.org/schemas/03/2005/apcm}ContentMetadata')
+        title = content.find('{http://ap.org/schemas/03/2005/apcm}HeadLine')
+        print title.text
+        nationalitems.append(title.text)
+    return render_template('preview.html', politicsitems=politicsitems, nationalitems=nationalitems)
+
 @app.errorhandler(413)
 def internal_server_error(e):
     return render_template('413.html'), 413
