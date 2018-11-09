@@ -269,14 +269,23 @@ def headlines():
     politicsitems = []
     nationalitems = []
     # iterate news items
-    namespaces = {'xmlns' : "http://www.w3.org/2005/Atom", 'apcm': 'http://ap.org/schemas/03/2005/apcm', 'apnm':"http://ap.org/schemas/03/2005/apnm", 'georss' : "http://www.georss.org/georss", 'o' : "http://w3.org/ns/odrl/2/"} # add more as needed
+    x = 0
+    y = 0
     for headline in root1.findall('{http://www.w3.org/2005/Atom}entry'):
+        if x > o:
+            break
         content = headline.find('{http://ap.org/schemas/03/2005/apcm}ContentMetadata')
         title = content.find('{http://ap.org/schemas/03/2005/apcm}HeadLine')
+        if 'AP Top Extended Political Headlines' in title:
+            x += 1
         politicsitems.append(title.text)
     for headline in root2.findall('{http://www.w3.org/2005/Atom}entry'):
+        if y > 0:
+            break
         content = headline.find('{http://ap.org/schemas/03/2005/apcm}ContentMetadata')
         title = content.find('{http://ap.org/schemas/03/2005/apcm}HeadLine')
+        if 'AP Top Extended U.S. Headlines' in title:
+            y += 1
         nationalitems.append(title.text)
     return render_template('preview.html', politicsitems=politicsitems, nationalitems=nationalitems)
 
