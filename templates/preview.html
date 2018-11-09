@@ -13,13 +13,13 @@ render Flask's flashed messages in a bootstrap friendly manner #}
   <h1>AP Political Headlines</h1>
   <div class="row">
     {% for item in politicsitems %}
-    <div class="col-md-12"><h5>Headline: </h5>{{ item }}</div>
+      <div class="col-md-12"><b>Headline: </b>{{ item }}</div>
     {% endfor %}
   </div>
   <h1>AP National Headlines</h1>
   <div class="row">
     {% for item in nationalitems %}
-    <div class="col-md-12"><h5>Headline: </h5>{{ item }}</div>
+    <div class="col-md-12"><b>Headline: </b>{{ item }}</div>
     {% endfor %}
   </div>
 </div>
