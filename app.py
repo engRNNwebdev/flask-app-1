@@ -273,13 +273,17 @@ def headlines():
     for headline in root1.findall('{http://www.w3.org/2005/Atom}entry'):
         content = headline.find('{http://ap.org/schemas/03/2005/apcm}ContentMetadata')
         title = content.find('{http://ap.org/schemas/03/2005/apcm}HeadLine')
+        updated = content.find('{http://www.w3.org/2005/Atom}updated')
         print title.text
         politicsitems.append(title.text)
+        politicsitems.append(updated.text)
     for headline in root2.findall('{http://www.w3.org/2005/Atom}entry'):
         content = headline.find('{http://ap.org/schemas/03/2005/apcm}ContentMetadata')
         title = content.find('{http://ap.org/schemas/03/2005/apcm}HeadLine')
+        updated = content.find('{http://www.w3.org/2005/Atom}updated')
         print title.text
         nationalitems.append(title.text)
+        nationalitems.append(updated.text)
     return render_template('preview.html', politicsitems=politicsitems, nationalitems=nationalitems)
 
 @app.errorhandler(413)
