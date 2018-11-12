@@ -272,7 +272,7 @@ def headlines():
     x = 0
     y = 0
     for headline in root1.findall('{http://www.w3.org/2005/Atom}entry'):
-        if x > o:
+        if x > 0:
             break
         content = headline.find('{http://ap.org/schemas/03/2005/apcm}ContentMetadata')
         title = content.find('{http://ap.org/schemas/03/2005/apcm}ExtendedHeadLine')
