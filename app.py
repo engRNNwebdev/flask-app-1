@@ -275,18 +275,20 @@ def headlines():
         if x > o:
             break
         content = headline.find('{http://ap.org/schemas/03/2005/apcm}ContentMetadata')
-        title = content.find('{http://ap.org/schemas/03/2005/apcm}HeadLine')
+        title = content.find('{http://ap.org/schemas/03/2005/apcm}ExtendedHeadLine')
         if 'AP Top Extended Political Headlines' in title:
             x += 1
-        politicsitems.append(title.text)
+        else:
+            politicsitems.append(title.text)
     for headline in root2.findall('{http://www.w3.org/2005/Atom}entry'):
         if y > 0:
             break
         content = headline.find('{http://ap.org/schemas/03/2005/apcm}ContentMetadata')
-        title = content.find('{http://ap.org/schemas/03/2005/apcm}HeadLine')
+        title = content.find('{http://ap.org/schemas/03/2005/apcm}ExtendedHeadLine')
         if 'AP Top Extended U.S. Headlines' in title:
             y += 1
-        nationalitems.append(title.text)
+        else:
+            nationalitems.append(title.text)
     return render_template('preview.html', politicsitems=politicsitems, nationalitems=nationalitems)
 
 @app.errorhandler(413)
