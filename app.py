@@ -76,7 +76,7 @@ def mosretriever():
     if request.method == 'POST':
         text = request.form['mosID']
         slug = request.form['slug']
-        if len(text) > 10 or len(mosLXF) > 20:
+        if len(text) > 10 or len(slug) > 15:
             flash('Text too long, please make follow up item less than 500 characters.')
         else:
             # Send MOS ID to csv
