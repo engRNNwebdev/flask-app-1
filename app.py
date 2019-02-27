@@ -70,7 +70,7 @@ def logout():
 def mossearch():
     return render_template('mos.html')
 
-@app.route('/mosretriever')
+@app.route('/mosretriever', methods = ['POST'])
 def mosretriever():
     mod = request.args.get('mod')
     if request.method == 'POST':
@@ -81,7 +81,7 @@ def mosretriever():
         else:
             # Send MOS ID to csv
             mosLXF = text + '.lxf'
-            with open('5AM Show.csv', mode='w') as moscommands:
+            with open('vantage_requests.csv', mode='w') as moscommands:
                 employee_writer = csv.writer(moscommands, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
                 employee_writer.writerow([text, mosLXF, slug])
         return redirect(url_for('mossearch'))
