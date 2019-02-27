@@ -5,7 +5,7 @@ from sqlalchemy.exc import IntegrityError
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required
 from config import BaseConfig
 from urlparse import urlparse
-import os, logging, links, re, shutil, xml.etree.ElementTree as ET
+import csv, os, logging, links, re, shutil, xml.etree.ElementTree as ET
 from logging.handlers import RotatingFileHandler
 from werkzeug.utils import secure_filename
 ALLOWED_EXTENSIONS = set(['txt'])
