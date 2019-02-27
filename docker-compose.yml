@@ -1,13 +1,14 @@
 version: '2'
 services:
   web:
-    image: ferraro/flask-app:rnn
+    image: ferraro/rnn-eng-tools:rnn
     ports:
       - "5000:5000"
     links:
       - postgres:postgres
     volumes:
       - /usr/src/app
+      - /AsRunDrop/GenerateReport:/folderRNN
     env_file: .env
     command: /usr/local/bin/gunicorn -w 2 -b :5000 app:app
 
