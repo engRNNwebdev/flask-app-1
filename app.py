@@ -5,7 +5,7 @@ from sqlalchemy.exc import IntegrityError
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required
 from config import BaseConfig
 from urlparse import urlparse
-import uplynk, os, logging, links, re, shutil, xml.etree.ElementTree as ET
+import os, logging, links, re, shutil, xml.etree.ElementTree as ET
 from logging.handlers import RotatingFileHandler
 from werkzeug.utils import secure_filename
 ALLOWED_EXTENSIONS = set(['txt'])
@@ -43,23 +43,6 @@ def index():
     web = Link.query.all()
     return render_template('index.html', web=web, items=items)
 
-@app.route('/status/<actionthing>/<name>/<success>')
-@login_required
-def status(name,actionthing,success):
-    if request.method == 'POST':
-        if success:
-            if actionthing == 'stop':
-                return render_template('uplynk_control.html', slicers = slicers, worky = 'Successfully stopped on port %s' % name)
-            elif actionthing == 'start':
-                return render_template('uplynk_control.html', slicers = slicers, worky = 'Successfully started on port %s' % name)
-        else:
-            if actionthing == 'stop':
-                return render_template('uplynk_control.html', slicers = slicers, worky = 'The Slicer failed to stop on port %s, please escalate to Engineering')
-            elif actionthing == 'start':
-                return render_template('uplynk_control.html', slicers = slicers, worky = 'The Slicer failed to start on port %s, please escalate to Engineering' % name)
-    else:
-        return render_template('uplynk_control.html', slicers = slicers, worky = 'The Slicer failed to start on port %s, please escalate to Engineering' % name)
-
 @app.route('/login', methods = ['POST', 'GET'])
 def login():
     if current_user.is_authenticated:
@@ -83,43 +66,27 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
-@app.route('/content_start', methods = ['POST', 'GET'])
-@login_required
-def start_slicer():
-  if request.method == 'POST':
-      external_id = request.form['external_id']
-      slicer = request.form['slicers']
-      title = request.form['title']
-      uplynk.content_start(slicer,external_id,title)
-      #return render_template('uplynk_control.html', status_capture = 'result')
-      return redirect(url_for('status', actionthing = 'start', name = slicer, success = True))
-  else:
-      sliced = request.args.get('slicers')
-      return redirect(url_for('status', actionthing = 'start', name = sliced, success = False))
+@app.route('/mossearch')
+def mossearch():
+    return render_template('mos.html')
 
-@app.route('/blackout', methods = ['POST', 'GET'])
-@login_required
-def blackout_slicer():
-  if request.method == 'POST':
-      slicer = request.form['slicers']
-      result = uplynk.blackout(slicer)
-      #return render_template('uplynk_control.html',status_capture = 'result')
-      return redirect(url_for('status', actionthing = 'stop', name = slicer, success = True))
-  else:
-      sliced = request.args.get('slicers')
-      return redirect(url_for('status', actionthing = 'stop', name = sliced, success = False))
-
-@app.route('/uplynk')
-@login_required
-def uplynk_control():
-    db_slicers = Slicer.query.order_by(Slicer.id.desc()).all()
-    app.logger.info(db_slicers)
-    return render_template('uplynk_control.html',slicers=db_slicers, worky = 'Select a Slicer and give the Asset a title and External ID (can be the same)')
-
-@app.route('/preview')
-@login_required
-def preview():
-    return render_template('preview.html')
+@app.route('/mosretriever')
+def mosretriever():
+    mod = request.args.get('mod')
+    if request.method == 'POST':
+        text = request.form['mosID']
+        slug = request.form['slug']
+        if len(text) > 10 or len(mosLXF) > 20:
+            flash('Text too long, please make follow up item less than 500 characters.')
+        else:
+            # Send MOS ID to csv
+            mosLXF = text + '.lxf'
+            with open('5AM Show.csv', mode='w') as moscommands:
+                employee_writer = csv.writer(moscommands, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+                employee_writer.writerow([text, mosLXF, slug])
+        return redirect(url_for('mossearch'))
+    elif request.method == 'GET':
+        return redirect(url_for('404'))
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):

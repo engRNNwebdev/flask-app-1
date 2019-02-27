@@ -1,0 +1,39 @@
+{# This simple template derives from ``base.html``.
+  See ``base.html`` for more information about template inheritance. #}
+  {%- extends "base.html" %}
+
+  {# Loads some of the macros included with Flask-Bootstrap.
+    We are using the utils module here to automatically
+render Flask's flashed messages in a bootstrap friendly manner #}
+
+{% import "bootstrap/utils.html" as utils %}
+
+
+<!-- *MOS ID	Mediabase ID	ENPS Slug
+LIH5AOPN1	LIH5AOPN1.lxf	Show -->
+
+{% block content %}
+<div class="container">
+  <h1>Uplynk Slicer Control</h1>
+  <h3>{{ worky }}</h3>
+  <div class="jumbotron">
+    <h3>Content Start Slicer</h3>
+    <form class="input-group" action="http://localhost:5000/content_start" method="post">
+
+      <p>Fill Out MOS ID</p>
+      <div role="separator" class="divider">
+        <label>MOS ID</label>
+        <input class="form-control" type="text" name="mosID" placeholder="Enter the MOS ID from the Rundown" />
+      </div>
+      <div role="separator" class="divider">
+        <label>Slug</label>
+        <input class="form-control" type="text" name="slug" placeholder="Optional Search Function"  />
+      </div>
+
+      <input class="btn btn-default" type="submit" value="Retrieve" />
+    </form>
+    <div name="status_capture"></div>
+  </div>
+</div>
+
+{% endblock %}
