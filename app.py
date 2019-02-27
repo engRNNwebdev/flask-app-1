@@ -76,12 +76,12 @@ def mosretriever():
     if request.method == 'POST':
         text = request.form['mosID']
         slug = request.form['slug']
-        if len(text) > 10 or len(slug) > 15:
-            flash('Text too long, please make follow up item less than 500 characters.')
+        if len(text) != 10 or len(slug) > 15:
+            flash('Please correct the MOS ID or shorten the slug')
         else:
             # Send MOS ID to csv
             mosLXF = text + '.lxf'
-            with open('vantage_requests.csv', mode='w') as moscommands:
+            with open('/folderRNN/vantage_requests.csv', mode='w') as moscommands:
                 employee_writer = csv.writer(moscommands, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
                 employee_writer.writerow([text, mosLXF, slug])
         return redirect(url_for('mossearch'))
