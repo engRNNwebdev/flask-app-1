@@ -81,9 +81,11 @@ def mosretriever():
         else:
             # Send MOS ID to csv
             mosLXF = text + '.lxf'
-            with open('/folderRNN/vantage_requests.csv', mode='w') as moscommands:
+            with open('/folderRNN/vantage_requests.csv', mode='a') as moscommands:
                 employee_writer = csv.writer(moscommands, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+                app.logger.info([text, mosLXF, slug])
                 employee_writer.writerow([text, mosLXF, slug])
+                app.logger.info('Write row to csv')
         return redirect(url_for('mossearch'))
     elif request.method == 'GET':
         return redirect(url_for('404'))
