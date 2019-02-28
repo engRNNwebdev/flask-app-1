@@ -13,13 +13,12 @@ LIH5AOPN1	LIH5AOPN1.lxf	Show -->
 
 {% block content %}
 <div class="container">
-  <h1>Grab MOS ID for Web Staff</h1>
+  <h2>Grab MOS ID for Web Staff</h2>
   <h3>{{ worky }}</h3>
   <div class="jumbotron">
-    <h3>Content Start Slicer</h3>
     <form class="input-group" action="http://slicer-ctrl.rnntv.com/mosretriever" method="post">
 
-      <p>Fill Out MOS ID</p>
+      <p>Enter MOS ID to transfer from storage</p>
       <div role="separator" class="divider">
         <label>MOS ID</label>
         <input class="form-control" type="text" name="mosID" placeholder="Enter the MOS ID from the Rundown" />
@@ -28,7 +27,13 @@ LIH5AOPN1	LIH5AOPN1.lxf	Show -->
         <label>Slug</label>
         <input class="form-control" type="text" name="slug" placeholder="Optional Search Function"  />
       </div>
-
+      <div role="separator" class="divider">
+        <p>OR</p>
+      </div>
+      <div role="separator" class="divider">
+        <label>ENPS MOS Object</label>
+        <input class="form-control" type="text" name="objectMOS" placeholder="Copy the MOS ID from ENPS Rundown"  />
+      </div>
       <input class="btn btn-default" type="submit" value="Retrieve" />
     </form>
     <div name="status_capture"></div>
