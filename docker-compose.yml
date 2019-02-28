@@ -5,6 +5,7 @@ web:
     - "5000:5000"
   volumes:
     - /usr/src/app
+    - /AsRunDrop/GenerateReport:/folderRNN
   env_file: .env
   command: /usr/local/bin/gunicorn -w 2 -b :5000 app:app
   links:
