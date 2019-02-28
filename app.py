@@ -79,18 +79,19 @@ def mosretriever():
         objectMOS = request.form['objectMOS']
         if "[<mos><itemID>" in objectMOS:
             app.logger.info("Read XML");
-            local_file = open('MOSID.xml', "wt")
-        	#Write to our local file
-            local_file.write(request.form['objectMOS'])
-            local_file.close()
-            tree = ET.parse('MOSID.xml')
-            app.logger.info(tree)
+            # local_file = open('MOSID.xml', "wt")
+        	# #Write to our local file
+            # local_file.write(request.form['objectMOS'])
+            # local_file.close()
+            # tree = ET.parse('MOSID.xml')
+            # app.logger.info(tree)
             # get root element
-            root = tree.getroot()
+            # root = tree.getroot()
+            root = ET.fromstring(objectMOS)
             # create empty list for MOS items
-            mosAbstract = root.find('mosAbstract')
+            mosAbstract = root.findall('mosAbstract')
             lxf = mosAbstract + '.lxf'
-            itemSlug = root.find('itemSlug')
+            itemSlug = root.findall('itemSlug')
             with open('/folderRNN/vantage_requests.csv', mode='a') as moscommands:
                 employee_writer = csv.writer(moscommands, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
                 app.logger.info([mosAbstract, lxf, itemSlug])
