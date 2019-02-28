@@ -79,10 +79,9 @@ def mosretriever():
         objectMOS = request.form['objectMOS']
         if "[<mos><itemID>" in objectMOS:
             app.logger.info("Read XML");
-            f = request.form['mosID']
             local_file = open('MOSID.xml', "wt")
         	#Write to our local file
-            local_file.write(f.read())
+            local_file.write(request.form['objectMOS'])
             local_file.close()
             tree = ET.parse('MOSID.xml')
             app.logger.info(tree)
@@ -97,7 +96,7 @@ def mosretriever():
                 app.logger.info([mosAbstract, lxf, itemSlug])
                 employee_writer.writerow([mosAbstract, lxf, itemSlug])
                 app.logger.info('Write row to csv via XML body')
-        if len(mosID) == 10 and len(slug) > 1:
+        if len(mosID) < 10 and len(slug) > 1:
             app.logger.info("Read MOS ID and Slug fields")
             mosLXF = mosID + '.lxf'
             with open('/folderRNN/vantage_requests.csv', mode='a') as moscommands:
@@ -107,7 +106,7 @@ def mosretriever():
                 app.logger.info('Write row to csv via dual fields')
         else:
             # Send MOS ID to csv
-            alert('Please fill out the form correctly')
+            flash('Please fill out the form correctly')
         return redirect(url_for('mossearch'))
     elif request.method == 'GET':
         return redirect(url_for('404'))

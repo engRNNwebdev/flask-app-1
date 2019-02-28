@@ -14,7 +14,13 @@ LIH5AOPN1	LIH5AOPN1.lxf	Show -->
 {% block content %}
 <div class="container">
   <h2>Grab MOS ID for Web Staff</h2>
-  <h3>{{ worky }}</h3>
+  {%- with messages = get_flashed_messages(with_categories=True) %} {%- if messages %}
+  <div class="row">
+    <div class="col-md-12">
+      {{utils.flashed_messages(messages)}}
+    </div>
+  </div>
+  {%- endif %} {%- endwith %}
   <div class="jumbotron">
     <form class="input-group" action="http://slicer-ctrl.rnntv.com/mosretriever" method="post">
 
