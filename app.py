@@ -99,6 +99,7 @@ def mosretriever():
                 app.logger.info([mosAbstract, lxf, itemSlug])
                 employee_writer.writerow([mosAbstract, lxf, itemSlug])
                 app.logger.info('Write row to csv via XML body')
+            flash('Request has been sent ' + mosAbstract)
         elif len(mosID) < 10 and len(mosID) > 8 and len(slug) > 1:
             app.logger.info("Read MOS ID and Slug fields")
             mosLXF = mosID + '.lxf'
@@ -107,6 +108,7 @@ def mosretriever():
                 app.logger.info([mosID, mosLXF, slug])
                 employee_writer.writerow([mosID, mosLXF, slug])
                 app.logger.info('Write row to csv via dual fields')
+            flash('Request has been sent ' + mosID)
         else:
             flash('Please fill out the form correctly')
         return redirect(url_for('mossearch'))
