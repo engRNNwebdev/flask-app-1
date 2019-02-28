@@ -79,8 +79,9 @@ def mosretriever():
         objectMOS = request.form['objectMOS']
         app.logger.info(objectMOS)
         if "[<mos><itemID>" in objectMOS and "</mosPayload></mosExternalMetadata></mos>]" in objectMOS:
-            last = len(objectMOS) - 1
-            new = objectMOS[1:last]
+            stripStr = objectMOS.strip()
+            last = len(stripStr) - 1
+            new = stripStr[1:last]
             app.logger.info("Read XML " + new)
             local_file = open('MOSID.xml', "wt")
         	#Write to our local file
@@ -93,7 +94,7 @@ def mosretriever():
             mosAbstract = root.find('mosAbstract').text
             lxf = mosAbstract + '.lxf'
             itemSlug = root.find('itemSlug').text
-            with open('vantage_requests.csv', mode='a') as moscommands:
+            with open('/folderRNN/vantage_requests.csv', mode='a') as moscommands:
                 employee_writer = csv.writer(moscommands, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
                 app.logger.info([mosAbstract, lxf, itemSlug])
                 employee_writer.writerow([mosAbstract, lxf, itemSlug])
