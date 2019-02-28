@@ -77,26 +77,28 @@ def mosretriever():
         mosID = request.form['mosID']
         slug = request.form['slug']
         objectMOS = request.form['objectMOS']
-        if "[<mos><itemID>" in objectMOS:
-            app.logger.info("Read XML");
+        app.logger.info(objectMOS)
+        if "[<mos><itemID>" in objectMOS and "</mosPayload></mosExternalMetadata></mos>]" in objectMOS:
+            last = len(objectMOS) - 1
+            new = objectMOS[1:last]
+            app.logger.info("Read XML " + new)
             local_file = open('MOSID.xml', "wt")
         	#Write to our local file
-            local_file.write(objectMOS)
+            local_file.write(new)
             local_file.close()
             tree = ET.parse('MOSID.xml')
-            app.logger.info(tree)
             # get root element
             root = tree.getroot()
             # create empty list for MOS items
-            mosAbstract = root.findall('mosAbstract')
+            mosAbstract = root.find('mosAbstract').text
             lxf = mosAbstract + '.lxf'
-            itemSlug = root.findall('itemSlug')
-            with open('/folderRNN/vantage_requests.csv', mode='a') as moscommands:
+            itemSlug = root.find('itemSlug').text
+            with open('vantage_requests.csv', mode='a') as moscommands:
                 employee_writer = csv.writer(moscommands, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
                 app.logger.info([mosAbstract, lxf, itemSlug])
                 employee_writer.writerow([mosAbstract, lxf, itemSlug])
                 app.logger.info('Write row to csv via XML body')
-        if len(mosID) < 10 and len(slug) > 1:
+        elif len(mosID) < 10 and len(mosID) > 8 and len(slug) > 1:
             app.logger.info("Read MOS ID and Slug fields")
             mosLXF = mosID + '.lxf'
             with open('/folderRNN/vantage_requests.csv', mode='a') as moscommands:
@@ -105,7 +107,6 @@ def mosretriever():
                 employee_writer.writerow([mosID, mosLXF, slug])
                 app.logger.info('Write row to csv via dual fields')
         else:
-            # Send MOS ID to csv
             flash('Please fill out the form correctly')
         return redirect(url_for('mossearch'))
     elif request.method == 'GET':
