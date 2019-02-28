@@ -79,15 +79,14 @@ def mosretriever():
         objectMOS = request.form['objectMOS']
         if "[<mos><itemID>" in objectMOS:
             app.logger.info("Read XML");
-            # local_file = open('MOSID.xml', "wt")
-        	# #Write to our local file
-            # local_file.write(request.form['objectMOS'])
-            # local_file.close()
-            # tree = ET.parse('MOSID.xml')
-            # app.logger.info(tree)
+            local_file = open('MOSID.xml', "wt")
+        	#Write to our local file
+            local_file.write(objectMOS)
+            local_file.close()
+            tree = ET.parse('MOSID.xml')
+            app.logger.info(tree)
             # get root element
-            # root = tree.getroot()
-            root = ET.fromstring(objectMOS)
+            root = tree.getroot()
             # create empty list for MOS items
             mosAbstract = root.findall('mosAbstract')
             lxf = mosAbstract + '.lxf'
