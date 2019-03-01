@@ -17,6 +17,7 @@ Bootstrap(app)
 #Initialize Login, Postgres and Upload folder
 app.config.from_object(BaseConfig)
 app.config['UPLOAD_FOLDER'] = os.getenv('UPLOAD_FOLDER')
+filePath = os.getenv('SHARE_WINDOWS')
 login = LoginManager(app)
 login.login_view = 'login'
 db = SQLAlchemy(app)
