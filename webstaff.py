@@ -48,7 +48,7 @@ def writeKalturaReq(jsonData):
     subTitle.set('lang', 'English')
     tag3.text = 'test'
     captions = jsonData["mosID"] + '.vtt'
-    dropFolderFileContentResource2.set('filePath', 'HVH5ABRK3.vtt')
+    dropFolderFileContentResource2.set('filePath', captions)
 
     # item1.set('name','item1')
     # item2.set('name','item2')
