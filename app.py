@@ -24,7 +24,7 @@ db = SQLAlchemy(app)
 
 from models import *
 from forms import *
-import enps
+import enps, webstaff
 
 # gunicorn logging
 if __name__ != '__main__':
@@ -37,6 +37,7 @@ if __name__ != '__main__':
 # web_ftp = links.links_ftp()
 # web_broadcast = links.links_broadcast()
 #Create web page routes
+
 @app.route('/', methods = ['POST', 'GET'])
 @login_required
 def index():
@@ -95,20 +96,23 @@ def mosretriever():
             mosAbstract = root.find('mosAbstract').text
             lxf = mosAbstract + '.lxf'
             itemSlug = root.find('itemSlug').text
-            with open('/folderRNN/vantage_requests.csv', mode='a') as moscommands:
-                employee_writer = csv.writer(moscommands, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-                app.logger.info([mosAbstract, lxf, itemSlug])
-                employee_writer.writerow([mosAbstract, lxf, itemSlug])
-                app.logger.info('Write row to csv via XML body')
+            webstaff.writeKalturaReq({"mosID" : mosAbstract, "lxf" : lxf, "slug" : itemSlug})
+            # with open('/folderRNN/vantage_requests.csv', mode='a') as moscommands:
+            #     employee_writer = csv.writer(moscommands, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            #     app.logger.info([mosAbstract, lxf, itemSlug])
+            #     employee_writer.writerow([mosAbstract, lxf, itemSlug])
+            #     app.logger.info('Write row to csv via XML body')
             flash('Request has been sent ' + mosAbstract)
         elif len(mosID) < 10 and len(mosID) > 8 and len(slug) > 1:
             app.logger.info("Read MOS ID and Slug fields")
             mosLXF = mosID + '.lxf'
-            with open('/folderRNN/vantage_requests.csv', mode='a') as moscommands:
-                employee_writer = csv.writer(moscommands, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-                app.logger.info([mosID, mosLXF, slug])
-                employee_writer.writerow([mosID, mosLXF, slug])
-                app.logger.info('Write row to csv via dual fields')
+            webstaff.writeKalturaReq({"mosID" : mosID, "lxf" : mosLXF, "slug" : slug})
+            # webstaff.writeRSS2({"mosID" : mosID, "lxf" : mosLXF, "slug" : slug})
+            # with open('/folderRNN/vantage_requests.csv', mode='a') as moscommands:
+            #     employee_writer = csv.writer(moscommands, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            #     app.logger.info([mosID, mosLXF, slug])
+            #     employee_writer.writerow([mosID, mosLXF, slug])
+            #     app.logger.info('Write row to csv via dual fields')
             flash('Request has been sent ' + mosID)
         else:
             flash('Please fill out the form correctly')
@@ -254,11 +258,11 @@ def headlines():
     enps.loadNational()
     enps.loadPolitics()
     tree1 = ET.parse('politics.xml')
-    app.logger.info(tree1)
+    # app.logger.info(tree1)
     tree2 = ET.parse('national.xml')
     # get root element
     root1 = tree1.getroot()
-    app.logger.info(root1)
+    # app.logger.info(root1)
     root2 = tree2.getroot()
     # create empty list for news items
     politicsitems = []

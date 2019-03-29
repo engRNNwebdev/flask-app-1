@@ -5,6 +5,17 @@ from urlparse import urlparse
 from app import db
 from models import *
 
+# class enpsModules:
+#     def __init__:
+#         self.url = os.getenv('URL')
+#         self.user = os.getenv('ENPS_NAME')
+#         self.api = os.getenv('API_NAME')
+#         self.password = os.getenv('PASS_ENPS')
+#         self.key = os.getenv('API_KEY')
+#         self.db = os.getenv('DATABASE')
+#     def login:
+#         return loggedIn
+#     def
 
 def loadPolitics():
     username = 'WRNN_webfeeds'

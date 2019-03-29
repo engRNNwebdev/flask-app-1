@@ -12,3 +12,4 @@ gunicorn==19.5.0
 itsdangerous==0.24
 psycopg2-binary==2.7.4
 requests
+PyMediaRSS2Gen
