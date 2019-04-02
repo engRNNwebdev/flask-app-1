@@ -84,7 +84,7 @@ def mosretriever():
         objectMOS = request.form['objectMOS']
         app.logger.info(objectMOS)
         if "[<mos><itemID>" in objectMOS and "</mosPayload></mosExternalMetadata></mos>]" in objectMOS:
-            if len(slug) > 25 or len(slug) < 1:
+            if len(slug) > 75 or len(slug) < 1:
                 app.logger.info('Slug too long')
                 flash('The slug is too long please shorten to 25 characters')
                 return render_template('mos.html')
