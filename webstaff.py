@@ -96,7 +96,7 @@ def ammendKalturaReq(jsonData):
     drop2 = subTitle.find('dropFolderFileContentResource')
     drop2.set('filePath', caption)
     # Write to new XML file
-    filePath = "/folderRNN/" + jsonData["mosID"] + "_" + fileDate + ".xml"
+    filePath = "/dropXML/" + jsonData["mosID"] + "_" + fileDate + ".xml"
     logging.info("Write to location: " + filePath)
     tree.write(filePath)
     post = minidom.parse(filePath)
