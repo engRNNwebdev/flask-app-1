@@ -10,7 +10,43 @@ render Flask's flashed messages in a bootstrap friendly manner #}
 
 <!-- *MOS ID	Mediabase ID	ENPS Slug
 LIH5AOPN1	LIH5AOPN1.lxf	Show -->
+{% block scripts %}
+{{super()}}
+<script type='text/javascript'>
+    // $('#spnCharOne', '#spnCharTwo').css('display', 'none');
+    var maxLimit1 = 25;
+    var maxLimit2 = 255;
+    $(document).ready(function () {
+        $('#inputOne').keyup(function () {
+            var lengthCount = $('#inputOne').val().length;
+            // console.log(lengthCount);
+            if (lengthCount > maxLimit1) {
+                $('#inputOne').value = $('#inputOne').val().substring(0, maxLimit2);
+                var charactersLeft = maxLimit1 - lengthCount + 1;
+            }
+            else {
+                var charactersLeft = maxLimit1 - lengthCount;
+            }
+            // $('#spnCharOne').css('display', 'block');
+            $('#spnCharOne').text(charactersLeft + ' Characters left');
+        });
+        $('#inputTwo').keyup(function () {
 
+            var lengthCount = $('#inputTwo').val().length;
+            // console.log(lengthCount);
+            if (lengthCount > maxLimit2) {
+                $('#inputTwo').val() = $('#inputTwo').val().substring(0, maxLimit2);
+                var charactersLeft = maxLimit2 - lengthCount + 1;
+            }
+            else {
+                var charactersLeft = maxLimit2 - lengthCount;
+            }
+            // $('#spnCharTwo').css('display', 'block');
+            $('#spnCharTwo').text(charactersLeft + ' Characters left');
+        });
+    });
+</script>
+{% endblock %}
 {% block content %}
 <div class="container">
   <h2>Grab MOS ID for Web Staff</h2>
@@ -23,22 +59,20 @@ LIH5AOPN1	LIH5AOPN1.lxf	Show -->
   {%- endif %} {%- endwith %}
   <div class="jumbotron">
     <form class="input-group" action="/mosretriever" method="post">
-
       <p>Enter MOS ID to transfer from storage</p>
       <div role="separator" class="divider">
-        <label>MOS ID</label>
-        <input class="form-control" type="text" name="mosID" placeholder="Enter the MOS ID from the Rundown" />
+        <label>ENPS MOS Object</label>
+        <input class="form-control" type="text" name="objectMOS" placeholder="Drag MOS from ENPS to Here"  />
       </div>
       <div role="separator" class="divider">
         <label>Slug</label>
-        <input class="form-control" type="text" name="slug" placeholder="Optional Search Function"  />
+        <input id="inputOne" class="form-control" type="text" name="slug" placeholder="Write Correct Story Slug Here"  />
+        <span id="spnCharOne"></span>
       </div>
       <div role="separator" class="divider">
-        <p>OR</p>
-      </div>
-      <div role="separator" class="divider">
-        <label>ENPS MOS Object</label>
-        <input class="form-control" type="text" name="objectMOS" placeholder="Copy the MOS ID from ENPS Rundown"  />
+        <label>Description</label>
+        <input id="inputTwo" class="form-control" type="text" name="description" placeholder="Add a detailed description"  />
+        <span id="spnCharTwo"></span>
       </div>
       <input class="btn btn-default" type="submit" value="Retrieve" />
     </form>

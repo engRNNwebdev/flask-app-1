@@ -1,0 +1,31 @@
+<mrss xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="ingestion.xsd">
+	<channel>
+		<item>
+			<action>add</action>
+			<type>1</type>
+			<userId>twissman</userId>
+			<name>%NAME%</name>
+			<description>News Story</description>
+			<tags>
+				<tag>Article</tag>
+				<tag>Creative</tag>
+			</tags>
+			<media>
+				<mediaType>1</mediaType>
+			</media>
+				<contentAssets>
+					<content>
+						<dropFolderFileContentResource filePath="%NAME%.mp4"/>
+					</content>
+				</contentAssets>
+			<subTitles>
+				<subTitle format="3" isDefault="true" label="English" lang="English">
+				<tags>
+					<tag>test</tag>
+				</tags>
+						<dropFolderFileContentResource filePath="%NAME%.vtt"/>
+				</subTitle>
+			</subTitles>
+		</item>
+	</channel>
+</mrss>

@@ -76,44 +76,40 @@ def mossearch():
 def mosretriever():
     mod = request.args.get('mod')
     if request.method == 'POST':
-        mosID = request.form['mosID']
         slug = request.form['slug']
+        description = request.form['description']
+        app.logger.info(len(slug))
+        app.logger.info('========')
+        app.logger.info(len(description))
         objectMOS = request.form['objectMOS']
         app.logger.info(objectMOS)
         if "[<mos><itemID>" in objectMOS and "</mosPayload></mosExternalMetadata></mos>]" in objectMOS:
-            stripStr = objectMOS.strip()
-            last = len(stripStr) - 1
-            new = stripStr[1:last]
-            app.logger.info("Read XML " + new)
-            local_file = open('MOSID.xml', "wt")
-        	#Write to our local file
-            local_file.write(new)
-            local_file.close()
-            tree = ET.parse('MOSID.xml')
-            # get root element
-            root = tree.getroot()
-            # create empty list for MOS items
-            mosAbstract = root.find('mosAbstract').text
-            lxf = mosAbstract + '.lxf'
-            itemSlug = root.find('itemSlug').text
-            webstaff.writeKalturaReq({"mosID" : mosAbstract, "lxf" : lxf, "slug" : itemSlug})
-            # with open('/folderRNN/vantage_requests.csv', mode='a') as moscommands:
-            #     employee_writer = csv.writer(moscommands, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            #     app.logger.info([mosAbstract, lxf, itemSlug])
-            #     employee_writer.writerow([mosAbstract, lxf, itemSlug])
-            #     app.logger.info('Write row to csv via XML body')
-            flash('Request has been sent ' + mosAbstract)
-        elif len(mosID) < 10 and len(mosID) > 8 and len(slug) > 1:
-            app.logger.info("Read MOS ID and Slug fields")
-            mosLXF = mosID + '.lxf'
-            webstaff.writeKalturaReq({"mosID" : mosID, "lxf" : mosLXF, "slug" : slug})
-            # webstaff.writeRSS2({"mosID" : mosID, "lxf" : mosLXF, "slug" : slug})
-            # with open('/folderRNN/vantage_requests.csv', mode='a') as moscommands:
-            #     employee_writer = csv.writer(moscommands, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            #     app.logger.info([mosID, mosLXF, slug])
-            #     employee_writer.writerow([mosID, mosLXF, slug])
-            #     app.logger.info('Write row to csv via dual fields')
-            flash('Request has been sent ' + mosID)
+            if len(slug) > 25 or len(slug) < 1:
+                app.logger.info('Slug too long')
+                flash('The slug is too long please shorten to 25 characters')
+                return render_template('mos.html')
+            if len(description) > 255 or len(slug) < 1:
+                app.logger.info('Description too long')
+                flash('The description is too long, please shorten to 255 characters')
+                return render_template('mos.html')
+            else:
+                stripStr = objectMOS.strip()
+                last = len(stripStr) - 1
+                new = stripStr[1:last]
+                app.logger.info("Read XML " + new)
+                local_file = open('MOSID.xml', "wt")
+            	#Write to our local file
+                local_file.write(new)
+                local_file.close()
+                tree = ET.parse('MOSID.xml')
+                # get root element
+                root = tree.getroot()
+                # create empty list for MOS items
+                mosAbstract = root.find('mosAbstract').text
+                lxf = mosAbstract + '.lxf'
+                # Send
+                webstaff.ammendKalturaReq({"mosID" : mosAbstract, "lxf" : lxf, "slug" : slug, "description" : description})
+                flash('Request has been sent ' + mosAbstract)
         else:
             flash('Please fill out the form correctly')
         return redirect(url_for('mossearch'))

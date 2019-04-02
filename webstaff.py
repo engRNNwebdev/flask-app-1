@@ -1,5 +1,6 @@
-import csv, requests, PyMediaRSS2Gen
+import csv, requests, datetime
 import xml.etree.ElementTree as ET
+from xml.dom import minidom
 import urllib2, sys, re, base64, logging
 from urlparse import urlparse
 from models import *
@@ -7,6 +8,7 @@ from models import *
 
 def writeKalturaReq(jsonData):
     # create the file structure
+
     mrss = ET.Element('mrss')
     channel = ET.SubElement(mrss, 'channel')
     item = ET.SubElement(channel, 'item')
@@ -64,51 +66,38 @@ def writeKalturaReq(jsonData):
     myfile = open(filePath, "w")
     myfile.write(mydata)
 
-
-def writeRSS2(jsonData):
-    mediaFeed = PyMediaRSS2Gen.MediaRSS2(
-        title="A sample Media RSS Feed",
-        link="https://github.com/wedi/PyMediaRSS2Gen/",
-        description="Description for a feed with media elements"
-    )
-    mediaFeed.copyright = "Copyright (c) 2014 Foo Inc. All rights reserved."
-    # mediaFeed.lastBuildDate = datetime.datetime.now()
-    mediaFeed.items = [
-        PyMediaRSS2Gen.MediaRSSItem(
-            title="First item with media element",
-            description="An image of foo attached in a media:content element",
-            media_content=PyMediaRSS2Gen.MediaContent(
-                url="http://example.com/assets/foo1.jpg",
-                fileSize=123456,
-                medium="image",
-                width="480",
-                height="640"
-            )
-        ),
-        PyMediaRSS2Gen.MediaRSSItem(
-            title="Second item with media element",
-            description="A video with multiple resolutions",
-            media_content=[
-                PyMediaRSS2Gen.MediaContent(
-                    url="http://example.com/assets/foo_HD.mp4",
-                    fileSize=8765432,
-                    type="video/mp4",
-                    width="1920",
-                    height="1080"
-                ),
-                PyMediaRSS2Gen.MediaContent(
-                    url="http://example.com/assets/foo_SD.mp4",
-                    fileSize=2345678,
-                    type="video/mp4",
-                    width="1280",
-                    height="720"
-                ),
-            ]
-        ),
-        PyMediaRSS2Gen.MediaRSSItem(
-            title="And an item with no media element at all",
-            description="An image of foo attached in an media:content element",
-            link="http://example.com/article/important-story.html"
-        )
-    ]
-    mediaFeed.write_xml(open("rss2.xml", "w"))
+def ammendKalturaReq(jsonData):
+    now = datetime.datetime.now()
+    logging.getLogger().setLevel(logging.INFO)
+    logging.info(now.strftime("%Y-%m-%d"))
+    fileDate = now.strftime("%Y-%m-%d")
+    caption = jsonData["mosID"] + "_" + fileDate + ".vtt"
+    mpeg = jsonData["mosID"] + "_" + fileDate + ".mp4"
+    # Parse the XML template
+    pre = minidom.parse('variables.xml')
+    logging.info(pre.toprettyxml())
+    tree = ET.parse('variables.xml')
+    root = tree.getroot()
+    # FIND APPROPRIATE ELEMENTS
+    logging.info("FIND APPROPRIATE ELEMENTS")
+    channel = root.find('channel')
+    item = channel.find('item')
+    name = item.find('name')
+    name.text = jsonData["mosID"]
+    description = item.find('description')
+    description.text = jsonData["description"]
+    name.text = jsonData["slug"]
+    contentAssets = item.find('contentAssets')
+    content = contentAssets.find('content')
+    subTitles = item.find('subTitles')
+    subTitle = subTitles.find('subTitle')
+    drop1 = content.find('dropFolderFileContentResource')
+    drop1.set('filePath', mpeg)
+    drop2 = subTitle.find('dropFolderFileContentResource')
+    drop2.set('filePath', caption)
+    # Write to new XML file
+    filePath = "/folderRNN/" + jsonData["mosID"] + "_" + fileDate + ".xml"
+    logging.info("Write to location: " + filePath)
+    tree.write(filePath)
+    post = minidom.parse(filePath)
+    logging.info(post.toprettyxml())
