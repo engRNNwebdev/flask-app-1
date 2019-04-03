@@ -83,14 +83,16 @@ def mosretriever():
         app.logger.info(len(description))
         objectMOS = request.form['objectMOS']
         app.logger.info(objectMOS)
+        banner = webstaff.findBanner(description)
+        app.logger.info(banner)
         if "[<mos><itemID>" in objectMOS and "</mosPayload></mosExternalMetadata></mos>]" in objectMOS:
-            if len(slug) > 75 or len(slug) < 1:
+            if len(slug) > 100 or len(slug) < 1:
                 app.logger.info('Slug too long')
-                flash('The slug is too long please shorten to 25 characters')
+                flash('The slug is too long please shorten to 100 characters')
                 return render_template('mos.html')
-            if len(description) > 255 or len(slug) < 1:
-                app.logger.info('Description too long')
-                flash('The description is too long, please shorten to 255 characters')
+            if banner == 'false':
+                app.logger.info('Banner is too long or not correct')
+                flash('The description is too long, please shorten to 255 characters or click and drag a banner object from ENPS')
                 return render_template('mos.html')
             else:
                 stripStr = objectMOS.strip()
@@ -105,11 +107,17 @@ def mosretriever():
                 # get root element
                 root = tree.getroot()
                 # create empty list for MOS items
+
                 mosAbstract = root.find('mosAbstract').text
+                app.logger.info(len(mosAbstract))
+                if len(mosAbstract) > 10 or len(mosAbstract) < 9:
+                    app.logger.info('Uploaded the incorrect MOS Object Type, please try again')
+                    flash('Uploaded the incorrect MOS Object Type, please try again')
+                    return render_template('mos.html')
                 lxf = mosAbstract + '.lxf'
                 # Send
-                webstaff.ammendKalturaReq({"mosID" : mosAbstract, "lxf" : lxf, "slug" : slug, "description" : description})
-                flash('Request has been sent ' + mosAbstract)
+                webstaff.ammendKalturaReq({"mosID" : mosAbstract, "lxf" : lxf, "slug" : slug, "description" : banner})
+                flash('Request has been sent to Kaltura ' + mosAbstract)
         else:
             flash('Please fill out the form correctly')
         return redirect(url_for('mossearch'))

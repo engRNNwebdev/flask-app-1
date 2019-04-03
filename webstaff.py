@@ -101,3 +101,25 @@ def ammendKalturaReq(jsonData):
     tree.write(filePath)
     post = minidom.parse(filePath)
     logging.info(post.toprettyxml())
+
+def findBanner(description):
+    logging.getLogger().setLevel(logging.INFO)
+    if "[<mos><itemID>" in description and "</mosPayload></mosExternalMetadata></mos>]" in description:
+        stripBan= description.strip()
+        last = len(stripBan) - 1
+        newBan = stripBan[1:last]
+        logging.info("Read Banner: " + newBan)
+        local_file = open('banner.xml', "wt")
+        #Write to our local file
+        local_file.write(newBan)
+        local_file.close()
+        tree = ET.parse('banner.xml')
+        # get root element
+        root = tree.getroot()
+        # create empty list for MOS items
+        banner = root.find('itemSlug').text
+    elif len(description) > 255 or len(description) < 5:
+        banner = 'false'
+    elif len(description) < 255:
+        banner = description
+    return banner
