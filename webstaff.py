@@ -117,7 +117,8 @@ def findBanner(description):
         # get root element
         root = tree.getroot()
         # create empty list for MOS items
-        banner = root.find('itemSlug').text
+        elem = root.find('itemSlug').text
+        banner = elem[15:]
     elif len(description) > 255 or len(description) < 5:
         banner = 'false'
     elif len(description) < 255:
