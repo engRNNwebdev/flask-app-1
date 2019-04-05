@@ -1,4 +1,4 @@
-import csv, requests, datetime
+import csv, requests, datetime, re
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
 import urllib2, sys, re, base64, logging
@@ -66,7 +66,7 @@ def writeKalturaReq(jsonData):
     myfile = open(filePath, "w")
     myfile.write(mydata)
 
-def ammendKalturaReq(jsonData):
+def ammendKalturaReq(jsonData, localFile):
     now = datetime.datetime.now()
     logging.getLogger().setLevel(logging.INFO)
     logging.info(now.strftime("%Y-%m-%d"))
@@ -96,7 +96,13 @@ def ammendKalturaReq(jsonData):
     drop2 = subTitle.find('dropFolderFileContentResource')
     drop2.set('filePath', caption)
     # Write to new XML file
-    filePath = "/dropXML/" + jsonData["mosID"] + "_" + fileDate + ".xml"
+    if localFile == 'on':
+        local = "local"
+        logging.info("Local Download Initiated...")
+        filePath = "/dropXML/" + local + "_" + jsonData["mosID"] + "_" + fileDate + ".xml"
+    else:
+        logging.info('Sending to Kaltura...')
+        filePath = "/dropXML/" + jsonData["mosID"] + "_" + fileDate + ".xml"
     logging.info("Write to location: " + filePath)
     tree.write(filePath)
     post = minidom.parse(filePath)
@@ -118,7 +124,12 @@ def findBanner(description):
         root = tree.getroot()
         # create empty list for MOS items
         elem = root.find('itemSlug').text
-        banner = elem[15:]
+        match = elem.find('Banner:') + 7
+        if match:
+            banner = elem[match:]
+        else:
+            banner = ""
+        logging.info(banner)
     elif len(description) > 255 or len(description) < 5:
         banner = 'false'
     elif len(description) < 255:

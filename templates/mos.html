@@ -64,7 +64,7 @@ LIH5AOPN1	LIH5AOPN1.lxf	Show -->
         <label>ENPS MOS Object</label>
         <input class="form-control" type="text" name="objectMOS" placeholder="Click and Drag a MOS from ENPS to Here"  />
       </div>
-      <div role="separator" class="divider">
+      <div role="separator" class="input-group">
         <label>Slug</label>
         <input id="inputOne" class="form-control" type="text" name="slug" placeholder="Write the Correct Story Slug Here"  />
         <span id="spnCharOne"></span>
@@ -74,9 +74,12 @@ LIH5AOPN1	LIH5AOPN1.lxf	Show -->
         <input id="inputTwo" class="form-control" type="text" name="description" placeholder="Click and Drag a Banner from ENPS or Type it"  />
         <span id="spnCharTwo"></span>
       </div>
-      <input class="btn btn-default" type="submit" value="Retrieve" />
+      <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="localFileTag" name="localFile">
+        <label class="form-check-label" for="localFileTag">Download Locally</label>
+      </div>
+      <input class="btn btn-default" type="submit" value="Search for Content" />
     </form>
-    <div name="status_capture"></div>
   </div>
 </div>
 {% endblock %}

@@ -78,9 +78,12 @@ def mosretriever():
     if request.method == 'POST':
         slug = request.form['slug']
         description = request.form['description']
-        app.logger.info(len(slug))
-        app.logger.info('========')
-        app.logger.info(len(description))
+        local = ''
+        if request.form.get('localFile'):
+            local += 'on'
+        # if request.form['localFile']:
+        #     local = request.form['localFile']
+        app.logger.info(local)
         objectMOS = request.form['objectMOS']
         app.logger.info(objectMOS)
         banner = webstaff.findBanner(description)
@@ -88,11 +91,11 @@ def mosretriever():
         if "[<mos><itemID>" in objectMOS and "</mosPayload></mosExternalMetadata></mos>]" in objectMOS:
             if len(slug) > 100 or len(slug) < 1:
                 app.logger.info('Slug too long')
-                flash('The slug is too long please shorten to 100 characters')
+                flash('The slug needs to be 1 to 100 characters')
                 return render_template('mos.html')
             if banner == 'false':
                 app.logger.info('Banner is too long or not correct')
-                flash('The description is too long, please shorten to 255 characters or click and drag a banner object from ENPS')
+                flash('The description field needs to be 5 to 255 characters or you can click and drag a banner object from ENPS')
                 return render_template('mos.html')
             else:
                 stripStr = objectMOS.strip()
@@ -116,7 +119,7 @@ def mosretriever():
                     return render_template('mos.html')
                 lxf = mosAbstract + '.lxf'
                 # Send
-                webstaff.ammendKalturaReq({"mosID" : mosAbstract, "lxf" : lxf, "slug" : slug, "description" : banner})
+                webstaff.ammendKalturaReq({"mosID" : mosAbstract, "lxf" : lxf, "slug" : slug, "description" : banner}, local)
                 flash('Request has been sent to Kaltura ' + mosAbstract)
         else:
             flash('Please fill out the form correctly')
