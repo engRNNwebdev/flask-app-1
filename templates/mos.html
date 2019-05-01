@@ -12,11 +12,13 @@ render Flask's flashed messages in a bootstrap friendly manner #}
 LIH5AOPN1	LIH5AOPN1.lxf	Show -->
 {% block scripts %}
 {{super()}}
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/2.0.0-beta1/js/bootstrap-select.min.js"></script>
 <script type='text/javascript'>
     // $('#spnCharOne', '#spnCharTwo').css('display', 'none');
     var maxLimit1 = 100;
     var maxLimit2 = 255;
     $(document).ready(function () {
+        $('select').selectpicker();
         $('#inputOne').keyup(function () {
             var lengthCount = $('#inputOne').val().length;
             // console.log(lengthCount);
@@ -75,8 +77,93 @@ LIH5AOPN1	LIH5AOPN1.lxf	Show -->
         <span id="spnCharTwo"></span>
       </div>
       <div class="form-check">
-        <input type="checkbox" class="form-check-input" id="localFileTag" name="localFile">
-        <label class="form-check-label" for="localFileTag">Download Locally</label>
+        <input type="checkbox" role="separator" class="form-check-input divider" id="localFileTag" name="localFile">
+        <label class="form-check-label" for="localFileTag">Download Video Locally</label>
+      </div>
+      <div class="divider" role="separator">
+        <label for="author">Post Author</label>
+        <select class="selectpicker" name="author">
+          <option value="twissman@rnntv.com">Tom Wissman</option>
+        </select>
+      </div>
+      <div class="divider" role="separator">
+          <label>Zone</label>
+          <select class="selectpicker" name="zone">
+            <option value="Generic">Generic/All Zones</option>
+            <option value="LHV">Hudson Valley</option>
+            <option value="LI">Long Island</option>
+            <option value="NJ">New Jersey</option>
+          </select>
+      </div>
+      <div class="divider" role="separator">
+        <label for="">Post Tags</label>
+        <select class="selectpicker" name="tags" data-live-search="true" title="Choose Tags for the Post" multiple>
+          <option value="News">News</option>
+          <option value="Weather">Weather</option>
+          <option value="Sports">Sports</option>
+          <option value="Long Island">Long Island</option>
+          <option value="NJ-Health">NJ-Health</option>
+          <option value="Business">Business</option>
+          <option value="NJ-Community">NJ-Community</option>
+          <option value="NJ_Crime &amp; Courts">NJ_Crime & Courts</option>
+          <option value="NJ-Education">NJ-Education</option>
+          <option value="NJ-Food">NJ-Food</option>
+          <option value="NJ-Politics">NJ-Politics</option>
+          <option value="Regional News">Regional News</option>
+          <option value="High School Sports">High School Sports</option>
+          <option value="LHV-College Sports">LHV College Sports</option>
+          <option value="National News">National News</option>
+          <option value="Pro Sports">Pro Sports</option>
+          <option value="International News">International News</option>
+          <option value="NJ News">NJ News</option>
+          <option value="LHV-News">LHV-News</option>
+          <option value="LI-News">LI-News</option>
+          <option value="LHV-Crime &amp; Courts">LHV-Crime & Courts</option>
+          <option value="LHV-Education">LHV Education</option>
+          <option value="LHV-Food">LHV-Food</option>
+          <option value="LHV-Health">LHV-Health</option>
+          <option value="LHV-Community">LHV-Community</option>
+          <option value="LHV-Business">LHV-Business</option>
+          <option value="LI-Business">LI-Business</option>
+          <option value="LI-Community">LI-Community</option>
+          <option value="LI-Education">LI-Education</option>
+          <option value="LI-Crime &amp; Courts">LI-Crime & Courts</option>
+          <option value="LI-Food">LI-Food</option>
+          <option value="LI-Health">LI-Health</option>
+          <option value="LHV-Politics">LHV-Politics</option>
+          <option value="LI-Poltiics">LI-Politics</option>
+          <option value="LHV-Sports">LHV-Sports</option>
+          <option value="LHV-High School Sports">LHV-High School Sports</option>
+          <option value="NJ-Sports">NJ-Sports</option>
+          <option value="NJ-Pro-Sports">NJ-Pro-Sports</option>
+          <option value="NJ-College-Sports">NJ-College-Sports</option>
+          <option value="NJ-High-School-Sports">NJ-High-School-Sports</option>
+          <option value="LI-Sports">LI-Sports</option>
+          <option value="LI-Pro-Sports">LI-Pro-Sports</option>
+          <option value="LI-College-Sports">LI-College-Sports</option>
+          <option value="LI-High-School-Sports">LI-High-School-Sports</option>
+          <option value="Crime and Courts">Crime and Courts</option>
+          <option value="NJ-Business">NJ-Business</option>
+          <option value="Programs">Programs</option>
+          <option value="LI-Programs">LI-Programs</option>
+          <option value="NJ-Programs">NJ-Programs</option>
+          <option value="LHV-Programs">LHV-Programs</option>
+          <option value="LHV-Election 2018">LHV-Election 2018</option>
+          <option value="LHV-FIOS1 Fighting Hunger Together">LHV-FIOS1 Fighting Hunger Together</option>
+          <option value="LHV-Restaurant Hunter">LHV-Restaurant Hunter</option>
+          <option value="NJ-Restaurant Hunter">NJ-Restaurant Hunter</option>
+          <option value="NJ-FIOS1 Fighting Hunger Together">NJ-FIOS1 Fighting Hunger Together</option>
+          <option value="NJ-Election 2018">NJ-Election 2018</option>
+          <option value="LHV-Newsbreakers">LHV-Newsbreakers</option>
+          <option value="FIOS1 News Now">FIOS1 News Now</option>
+          <option value="LI-Restaurant Hunter">LI-Restaurant Hunter</option>
+          <option value="LI-FIOS1 Fighting Hunger Together">LI-FIOS1 Fighting Hunger Together</option>
+          <option value="LI-Election 2018">LI-Election 2018</option>
+          <option value="Top Stories">Top Stories</option>
+          <option value="Tops Story 1">Tops Story 1</option>
+          <option value="Top Story 3">Top Story 3</option>
+          <option value="Spring Training 2019">Spring Training 2019</option>
+        </select>
       </div>
       <input class="btn btn-default" type="submit" value="Search for Content" />
     </form>

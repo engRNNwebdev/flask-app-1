@@ -76,16 +76,34 @@ def mossearch():
 def mosretriever():
     mod = request.args.get('mod')
     if request.method == 'POST':
-        slug = request.form['slug']
-        description = request.form['description']
+        app.logger.info(request.form)
+        counter = 0
+        if 'objectMOS' in request.form:
+            counter += 1
+            objectMOS = request.form['objectMOS']
+        if 'zone' in request.form:
+            counter += 1
+            zone = request.form['zone']
+        if 'slug' in request.form:
+            counter += 1
+            slug = request.form['slug']
+        if 'description' in request.form:
+            counter += 1
+            description = request.form['description']
+        if 'tags' in request.form:
+            counter += 1
+            tags = request.form['tags']
+        if 'author' in request.form:
+            counter += 1
+            author = request.form['author']
+        app.logger.info(counter)
+        if counter < 6:
+            flash('Please Select at least 1 Tag, add a Banner, MOS ID and Slug')
+            return render_template('mos.html')
         local = ''
         if request.form.get('localFile'):
             local += 'on'
-        # if request.form['localFile']:
-        #     local = request.form['localFile']
         app.logger.info(local)
-        objectMOS = request.form['objectMOS']
-        app.logger.info(objectMOS)
         banner = webstaff.findBanner(description)
         app.logger.info(banner)
         if "[<mos><itemID>" in objectMOS and "</mosPayload></mosExternalMetadata></mos>]" in objectMOS:
@@ -120,9 +138,10 @@ def mosretriever():
                 lxf = mosAbstract + '.lxf'
                 # Send
                 webstaff.ammendKalturaReq({"mosID" : mosAbstract, "lxf" : lxf, "slug" : slug, "description" : banner}, local)
+                webstaff.createWordPressCSV(slug, zone, author, mosAbstract, banner)
                 flash('Request has been sent to Kaltura ' + mosAbstract)
         else:
-            flash('Please fill out the form correctly')
+            flash('Please fill out all form fields as directed, thank you')
         return redirect(url_for('mossearch'))
     elif request.method == 'GET':
         return redirect(url_for('404'))

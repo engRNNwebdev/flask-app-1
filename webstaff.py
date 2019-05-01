@@ -135,3 +135,18 @@ def findBanner(description):
     elif len(description) < 255:
         banner = description
     return banner
+
+def createWordPressCSV(slug, zone, author, mosID, banner):
+    logging.getLogger().setLevel(logging.INFO)
+    now = datetime.datetime.now()
+    theDate = now.strftime("%Y-%m-%d")
+    with open('/wordpress/wordpress_posts.csv', mode='w') as employee_file:
+        employee_writer = csv.writer(employee_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        employee_writer.writerow([slug, zone, author, banner, theDate, mosID])
+
+
+# ImmutableMultiDict([('objectMOS', u''),
+# ('description', u''),
+# ('slug', u''),
+# ('zone', u'Generic'),
+# ('tags', u'Regional News'), ('tags', u'National News'), ('tags', u'International News')])
