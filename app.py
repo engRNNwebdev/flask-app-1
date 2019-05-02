@@ -76,7 +76,8 @@ def mossearch():
 def mosretriever():
     mod = request.args.get('mod')
     if request.method == 'POST':
-        app.logger.info(request.form)
+        formData = request.form
+        app.logger.info(formData)
         counter = 0
         if 'objectMOS' in request.form:
             counter += 1
@@ -96,14 +97,12 @@ def mosretriever():
         if 'author' in request.form:
             counter += 1
             author = request.form['author']
-        app.logger.info(counter)
         if counter < 6:
             flash('Please Select at least 1 Tag, add a Banner, MOS ID and Slug')
             return render_template('mos.html')
         local = ''
         if request.form.get('localFile'):
             local += 'on'
-        app.logger.info(local)
         banner = webstaff.findBanner(description)
         app.logger.info(banner)
         if "[<mos><itemID>" in objectMOS and "</mosPayload></mosExternalMetadata></mos>]" in objectMOS:
@@ -138,7 +137,7 @@ def mosretriever():
                 lxf = mosAbstract + '.lxf'
                 # Send
                 webstaff.ammendKalturaReq({"mosID" : mosAbstract, "lxf" : lxf, "slug" : slug, "description" : banner}, local)
-                webstaff.createWordPressCSV(slug, zone, author, mosAbstract, banner)
+                webstaff.createWordPressCSV(slug, zone, author, mosAbstract, banner, tags)
                 flash('Request has been sent to Kaltura ' + mosAbstract)
         else:
             flash('Please fill out all form fields as directed, thank you')

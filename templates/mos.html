@@ -21,7 +21,7 @@ LIH5AOPN1	LIH5AOPN1.lxf	Show -->
         $('select').selectpicker();
         $('#inputOne').keyup(function () {
             var lengthCount = $('#inputOne').val().length;
-            // console.log(lengthCount);
+            console.log(lengthCount);
             if (lengthCount > maxLimit1) {
                 $('#inputOne').value = $('#inputOne').val().substring(0, maxLimit2);
                 var charactersLeft = maxLimit1 - lengthCount + 1;
@@ -33,7 +33,6 @@ LIH5AOPN1	LIH5AOPN1.lxf	Show -->
             $('#spnCharOne').text(charactersLeft + ' Characters left');
         });
         $('#inputTwo').keyup(function () {
-
             var lengthCount = $('#inputTwo').val().length;
             // console.log(lengthCount);
             if (lengthCount > maxLimit2) {
@@ -46,7 +45,44 @@ LIH5AOPN1	LIH5AOPN1.lxf	Show -->
             // $('#spnCharTwo').css('display', 'block');
             $('#spnCharTwo').text(charactersLeft + ' Characters left');
         });
+        $('#formSubmit').on('click', function(){
+          console.log({
+            objectMOS: $("input[name='objectMOS']").val(),
+            slug: $("input[name='slug']").val(),
+            description: $("input[name='description']").val(),
+            localFile: $("input[name='localFile']").val(),
+            author: $("option[name='author']").val(),
+            tags: $("option[name='tags']").val()
+          });
+        });
     });
+    function sendForm(){
+
+      $.ajax({
+        url: '/mosretriever',
+        type: 'POST',
+        method: 'POST'
+        dataType: 'json',
+        data: {
+          objectMOS: $('input[objectMOS]').val(),
+          slug: $('input[slug]').val(),
+          description: $('input[description]').val(),
+          localFile: $('input[localFile]').val(),
+          author: $('option[author]').val(),
+          tags: $('option[tags]').val()
+        }
+      })
+      .done(function() {
+        console.log("success");
+      })
+      .fail(function() {
+        console.log("error");
+      })
+      .always(function() {
+        console.log("complete");
+      });
+
+    }
 </script>
 {% endblock %}
 {% block content %}
@@ -84,6 +120,9 @@ LIH5AOPN1	LIH5AOPN1.lxf	Show -->
         <label for="author">Post Author</label>
         <select class="selectpicker" name="author">
           <option value="twissman@rnntv.com">Tom Wissman</option>
+          <option value="jflanagan@rnntv.com">Jacob Flanagan</option>
+          <option value="dschultz@rnntv.com">Dan Schultz</option>
+          <option value="rtorres@rnntv.com">Roberto Torres</option>
         </select>
       </div>
       <div class="divider" role="separator">
@@ -165,7 +204,7 @@ LIH5AOPN1	LIH5AOPN1.lxf	Show -->
           <option value="Spring Training 2019">Spring Training 2019</option>
         </select>
       </div>
-      <input class="btn btn-default" type="submit" value="Search for Content" />
+      <input class="btn btn-default" type="submit" value="Search for Content" id="formSubmit"/>
     </form>
   </div>
 </div>
