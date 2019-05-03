@@ -110,6 +110,7 @@ def ammendKalturaReq(jsonData, localFile):
 
 def findBanner(description):
     logging.getLogger().setLevel(logging.INFO)
+    logging.info(description)
     if "[<mos><itemID>" in description and "</mosPayload></mosExternalMetadata></mos>]" in description:
         stripBan= description.strip()
         last = len(stripBan) - 1

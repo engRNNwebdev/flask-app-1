@@ -18,7 +18,8 @@ LIH5AOPN1	LIH5AOPN1.lxf	Show -->
     var maxLimit1 = 100;
     var maxLimit2 = 255;
     $(document).ready(function () {
-        $('select').selectpicker();
+      $('select[name=tags]').selectpicker('val', 1);
+      $('select').selectpicker();
         $('#inputOne').keyup(function () {
             var lengthCount = $('#inputOne').val().length;
             console.log(lengthCount);
@@ -141,7 +142,7 @@ LIH5AOPN1	LIH5AOPN1.lxf	Show -->
       <div class="divider" role="separator">
         <label for="">Post Tags</label>
         <select class="selectpicker" name="tags" data-live-search="true" title="Choose Tags for the Post" multiple>
-          <option value="News">News</option>
+          <option selected value="News">News</option>
           <option value="Weather">Weather</option>
           <option value="Sports">Sports</option>
           <option value="Long Island">Long Island</option>

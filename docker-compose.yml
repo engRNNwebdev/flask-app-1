@@ -5,9 +5,12 @@ web-dev:
     - "4000:4000"
   volumes:
     - /usr/src/app
-    - /AsRunDrop/GenerateReport:/folderRNN
-    - /dropXML:/dropXML
-    - /wordpress:/wordpress
+    # - /AsRunDrop/GenerateReport:/folderRNN
+    # - /dropXML:/dropXML
+    # - /wordpress:/wordpress
+    - /wordpress
+    - /dropXML
+    - /folderRNN
   env_file: .env
   command: /usr/local/bin/gunicorn -w 2 -b :4000 app:app
 #   links:
