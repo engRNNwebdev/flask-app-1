@@ -76,14 +76,6 @@ def mossearch():
 def mosdelivery():
     app.logger.info(request.get_json())
     json = request.get_json()
-    # objectMOS = json['objectMOS']
-    # zone = json['zone']
-    # slug = json['slug']
-    # description = json['description']
-    # tags = json['tags']
-    # author = json['author']
-    # app.logger.info(objectMOS)
-    # app.logger.info(tags)
     if request.method == 'POST':
         counter = 0
         if 'objectMOS' in json:
@@ -117,11 +109,11 @@ def mosdelivery():
             if len(slug) > 100 or len(slug) < 1:
                 app.logger.info('Slug too long')
                 flash('The slug needs to be 1 to 100 characters')
-                return render_template('mos.html')
+                return jsonify({"error" : "The slug needs to be 1 to 100 characters"})
             if banner == 'false':
                 app.logger.info('Banner is too long or not correct')
                 flash('The description field needs to be 5 to 255 characters or you can click and drag a banner object from ENPS')
-                return render_template('mos.html')
+                return jsonify({"error" : "Banner is too long or not correct"})
             else:
                 stripStr = objectMOS.strip()
                 last = len(stripStr) - 1
@@ -141,18 +133,19 @@ def mosdelivery():
                 if len(mosAbstract) > 10 or len(mosAbstract) < 9:
                     app.logger.info('Uploaded the incorrect MOS Object Type, please try again')
                     flash('Uploaded the incorrect MOS Object Type, please try again')
-                    return render_template('mos.html')
+                    return jsonify({"error": "Uploaded the incorrect MOS Object Type, please try again"})
                 lxf = mosAbstract + '.lxf'
                 # Send
                 webstaff.ammendKalturaReq({"mosID" : mosAbstract, "lxf" : lxf, "slug" : slug, "description" : banner}, local)
                 webstaff.createWordPressCSV(slug, zone, author, mosAbstract, banner, tags)
                 flash('Request has been sent to Kaltura ' + mosAbstract)
-                return render_template('mos.html')
+                return jsonify({"success": "Request has been sent to Kaltura for : " + mosAbstract})
         else:
             flash('Please fill out all form fields as directed, thank you')
-        return redirect(url_for('mossearch'))
+        return jsonify({"error" : "Please fill out form fields as directed, thank you"})    
+        # return redirect(url_for('mossearch'))
     elif request.method == 'GET':
-        return redirect(url_for('404'))
+        return redirect(url_for('500'))
 
 # @app.route('/mosretriever', methods = ['POST'])
 # def mosretriever():

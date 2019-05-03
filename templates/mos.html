@@ -18,7 +18,7 @@ LIH5AOPN1	LIH5AOPN1.lxf	Show -->
     var maxLimit1 = 100;
     var maxLimit2 = 255;
     $(document).ready(function () {
-      $('select[name=tags]').selectpicker('val', 1);
+      // $('select[name=tags]').selectpicker('val', 1);
       $('select').selectpicker();
         $('#inputOne').keyup(function () {
             var lengthCount = $('#inputOne').val().length;
@@ -79,6 +79,7 @@ LIH5AOPN1	LIH5AOPN1.lxf	Show -->
           };
           $.ajax(settings).done(function (response) {
             console.log(response);
+            $('#flashed_messages').append(response);
           }).fail(function(error) {
             alert('Something went wrong, please ensure the form is filled out properly');
           })
@@ -95,7 +96,7 @@ LIH5AOPN1	LIH5AOPN1.lxf	Show -->
   <h2>Grab MOS ID for Web Staff</h2>
   {%- with messages = get_flashed_messages(with_categories=True) %} {%- if messages %}
   <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-12" id="flashed_messages">
       {{utils.flashed_messages(messages)}}
     </div>
   </div>
