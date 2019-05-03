@@ -46,43 +46,47 @@ LIH5AOPN1	LIH5AOPN1.lxf	Show -->
             $('#spnCharTwo').text(charactersLeft + ' Characters left');
         });
         $('#formSubmit').on('click', function(){
-          console.log({
+          var localFile;
+          if($("input[name='localFile']").prop("checked") == true){
+                console.log("Checkbox is checked.");
+                localFile = true;
+            }
+            else if($("input[name='localFile']").prop("checked") == false){
+                console.log("Checkbox is unchecked.");
+                localFile = false;
+            }
+          var data = {
             objectMOS: $("input[name='objectMOS']").val(),
             slug: $("input[name='slug']").val(),
+            zone: $("select[name='zone']").val(),
             description: $("input[name='description']").val(),
-            localFile: $("input[name='localFile']").val(),
-            author: $("option[name='author']").val(),
-            tags: $("option[name='tags']").val()
+            local: localFile,
+            author: $("select[name='author']").val(),
+            tags: $("select[name='tags']").val()
+          }
+          var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": "/mosdelivery",
+            "method": "POST",
+            "headers": {
+              "Content-Type": "application/json",
+              "Cache-Control": "no-cache"
+            },
+            "processData": false,
+            "data": JSON.stringify(data)
+          };
+          $.ajax(settings).done(function (response) {
+            console.log(response);
+          }).fail(function(error) {
+            alert('Something went wrong, please ensure the form is filled out properly');
+          })
+          .always(function() {
+            console.log("complete");
           });
+
         });
     });
-    function sendForm(){
-
-      $.ajax({
-        url: '/mosretriever',
-        type: 'POST',
-        method: 'POST'
-        dataType: 'json',
-        data: {
-          objectMOS: $('input[objectMOS]').val(),
-          slug: $('input[slug]').val(),
-          description: $('input[description]').val(),
-          localFile: $('input[localFile]').val(),
-          author: $('option[author]').val(),
-          tags: $('option[tags]').val()
-        }
-      })
-      .done(function() {
-        console.log("success");
-      })
-      .fail(function() {
-        console.log("error");
-      })
-      .always(function() {
-        console.log("complete");
-      });
-
-    }
 </script>
 {% endblock %}
 {% block content %}
@@ -96,7 +100,7 @@ LIH5AOPN1	LIH5AOPN1.lxf	Show -->
   </div>
   {%- endif %} {%- endwith %}
   <div class="jumbotron">
-    <form class="input-group" action="/mosretriever" method="post">
+    <form class="input-group" >
       <p>Enter MOS ID to transfer from storage</p>
       <div role="separator" class="divider">
         <label>ENPS MOS Object</label>

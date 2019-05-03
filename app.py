@@ -72,6 +72,88 @@ def logout():
 def mossearch():
     return render_template('mos.html')
 
+@app.route('/mosdelivery', methods = ['POST'])
+def mosdelivery():
+    app.logger.info(request.get_json())
+    json = request.get_json()
+    # objectMOS = json['objectMOS']
+    # zone = json['zone']
+    # slug = json['slug']
+    # description = json['description']
+    # tags = json['tags']
+    # author = json['author']
+    # app.logger.info(objectMOS)
+    # app.logger.info(tags)
+    if request.method == 'POST':
+        counter = 0
+        if 'objectMOS' in json:
+            counter += 1
+            objectMOS = json['objectMOS']
+        if 'zone' in json:
+            counter += 1
+            zone = json['zone']
+        if 'slug' in json:
+            counter += 1
+            slug = json['slug']
+        if 'description' in json:
+            counter += 1
+            description = json['description']
+        if 'tags' in json:
+            counter += 1
+            tags = json['tags']
+        if 'author' in json:
+            counter += 1
+            author = json['author']
+        if counter < 6:
+            flash('Please Select at least 1 Tag, add a Banner, MOS ID and Slug')
+            return render_template('mos.html')
+        if json['local']:
+            local = 'on'
+        elif json['local'] == False:
+            local = ''
+        banner = webstaff.findBanner(description)
+        app.logger.info(banner)
+        if "[<mos><itemID>" in objectMOS and "</mosPayload></mosExternalMetadata></mos>]" in objectMOS:
+            if len(slug) > 100 or len(slug) < 1:
+                app.logger.info('Slug too long')
+                flash('The slug needs to be 1 to 100 characters')
+                return render_template('mos.html')
+            if banner == 'false':
+                app.logger.info('Banner is too long or not correct')
+                flash('The description field needs to be 5 to 255 characters or you can click and drag a banner object from ENPS')
+                return render_template('mos.html')
+            else:
+                stripStr = objectMOS.strip()
+                last = len(stripStr) - 1
+                new = stripStr[1:last]
+                app.logger.info("Read XML " + new)
+                local_file = open('MOSID.xml', "wt")
+            	#Write to our local file
+                local_file.write(new)
+                local_file.close()
+                tree = ET.parse('MOSID.xml')
+                # get root element
+                root = tree.getroot()
+                # create empty list for MOS items
+
+                mosAbstract = root.find('mosAbstract').text
+                app.logger.info(len(mosAbstract))
+                if len(mosAbstract) > 10 or len(mosAbstract) < 9:
+                    app.logger.info('Uploaded the incorrect MOS Object Type, please try again')
+                    flash('Uploaded the incorrect MOS Object Type, please try again')
+                    return render_template('mos.html')
+                lxf = mosAbstract + '.lxf'
+                # Send
+                webstaff.ammendKalturaReq({"mosID" : mosAbstract, "lxf" : lxf, "slug" : slug, "description" : banner}, local)
+                webstaff.createWordPressCSV(slug, zone, author, mosAbstract, banner, tags)
+                flash('Request has been sent to Kaltura ' + mosAbstract)
+                return render_template('mos.html')
+        else:
+            flash('Please fill out all form fields as directed, thank you')
+        return redirect(url_for('mossearch'))
+    elif request.method == 'GET':
+        return redirect(url_for('404'))
+
 @app.route('/mosretriever', methods = ['POST'])
 def mosretriever():
     mod = request.args.get('mod')

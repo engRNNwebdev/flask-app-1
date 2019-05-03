@@ -9,5 +9,5 @@ RUN apk update && \
  python -m pip install -r requirements.txt --no-cache-dir && \
  apk --purge del .build-deps
 COPY . /app
-EXPOSE 5000
+EXPOSE 4000
 CMD ["python", "-u", "/app/app.py"]

@@ -96,7 +96,7 @@ def ammendKalturaReq(jsonData, localFile):
     drop2 = subTitle.find('dropFolderFileContentResource')
     drop2.set('filePath', caption)
     # Write to new XML file
-    if localFile == 'on':
+    if localFile == True:
         local = "local"
         logging.info("Local Download Initiated...")
         filePath = "/dropXML/" + local + "_" + jsonData["mosID"] + "_" + fileDate + ".xml"
