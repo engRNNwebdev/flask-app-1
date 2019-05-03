@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, request, render_template, flash, send_from_directory
+from flask import Flask, redirect, url_for, request, render_template, flash, send_from_directory, jsonify
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy, SessionBase
 from sqlalchemy.exc import IntegrityError
@@ -142,7 +142,8 @@ def mosdelivery():
                 return jsonify({"success": "Request has been sent to Kaltura for : " + mosAbstract})
         else:
             flash('Please fill out all form fields as directed, thank you')
-        return jsonify({"error" : "Please fill out form fields as directed, thank you"})    
+            return jsonify({"error" : "Please fill out all form fields as directed, thank you"})
+        return jsonify({"error" : "Please fill out form fields as directed, thank you"})
         # return redirect(url_for('mossearch'))
     elif request.method == 'GET':
         return redirect(url_for('500'))

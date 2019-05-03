@@ -77,16 +77,15 @@ LIH5AOPN1	LIH5AOPN1.lxf	Show -->
             "processData": false,
             "data": JSON.stringify(data)
           };
-          $.ajax(settings).done(function (response) {
-            console.log(response);
-            $('#flashed_messages').append(response);
+          $.ajax(settings).done(function (success) {
+            console.log(success);
+            $('#flashed_messages').append("<p>" + success.success+ "</p>");
+            location.reload();
           }).fail(function(error) {
-            alert('Something went wrong, please ensure the form is filled out properly');
-          })
-          .always(function() {
-            console.log("complete");
+            console.log(error);
+            $('#flashed_messages').append("<p>" + error.error + "</p>");
+            location.reload();
           });
-
         });
     });
 </script>

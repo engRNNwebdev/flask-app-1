@@ -111,6 +111,7 @@ def ammendKalturaReq(jsonData, localFile):
 def findBanner(description):
     logging.getLogger().setLevel(logging.INFO)
     logging.info(description)
+    banner = ""
     if "[<mos><itemID>" in description and "</mosPayload></mosExternalMetadata></mos>]" in description:
         stripBan= description.strip()
         last = len(stripBan) - 1
@@ -127,14 +128,12 @@ def findBanner(description):
         elem = root.find('itemSlug').text
         match = elem.find('Banner:') + 7
         if match:
-            banner = elem[match:]
+            banner += elem[match:]
         else:
-            banner = ""
+            banner += ""
         logging.info(banner)
-    elif len(description) > 255 or len(description) < 5:
-        banner = 'false'
     elif len(description) < 255:
-        banner = description
+        banner += description
     return banner
 
 def createWordPressCSV(slug, zone, author, mosID, banner, tags):
