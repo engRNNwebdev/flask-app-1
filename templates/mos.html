@@ -80,11 +80,11 @@ LIH5AOPN1	LIH5AOPN1.lxf	Show -->
           $.ajax(settings).done(function (success) {
             console.log(success);
             $('#flashed_messages').append("<p>" + success.success+ "</p>");
-            location.reload();
+//             location.reload();
           }).fail(function(error) {
             console.log(error);
             $('#flashed_messages').append("<p>" + error.error + "</p>");
-            location.reload();
+//             location.reload();
           });
         });
     });
