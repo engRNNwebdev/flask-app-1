@@ -8,6 +8,8 @@ RUN apk update && \
  apk add --virtual .build-deps gcc musl-dev postgresql-dev && \
  python -m pip install -r requirements.txt --no-cache-dir && \
  apk --purge del .build-deps
+RUN apk add --no-cache tzdata
+ENV TZ America/New_York
 COPY . /app
 EXPOSE 5000
 CMD ["python", "-u", "/app/app.py"]
